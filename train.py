@@ -61,7 +61,7 @@ def train(args, seed_start, best_acc, best_seed, N, model, device, train_loader,
         if i % args.log_interval == 0:
             print('(iter {}) best acc: {:.0f}%'.format(i, 100*best_acc))
     
-    return best_seed
+    return best_seed, best_acc
 
 def test(args, model, device, test_loader):
     model.eval()
@@ -134,7 +134,7 @@ def main():
     best_seed = 0
     N = 10000
     for epoch in range(1, args.epochs + 1):
-        best_seed = train(args, seed_start, best_acc, best_seed, N, model, device, train_loader, optimizer, epoch)
+        best_seed, best_acc = train(args, seed_start, best_acc, best_seed, N, model, device, train_loader, optimizer, epoch)
         seed_start += N
         torch.manual_seed(best_seed)
         model.apply(weights_init)

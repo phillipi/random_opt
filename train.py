@@ -75,6 +75,7 @@ def train(args, seed_start, best_acc, best_seed, N, model, device, train_loader,
         if acc > best_acc:
             
             # double check
+            print('acc1:', acc)
             acc = 0
             for batch_idx, (data, target) in enumerate(train_loader):
                 data, target = data.to(device), target.to(device)
@@ -84,6 +85,7 @@ def train(args, seed_start, best_acc, best_seed, N, model, device, train_loader,
                 if batch_idx>10:
                     break
             acc = acc/batch_idx
+            print('acc2:', acc)
             
             if acc > best_acc:
                 best_acc = acc

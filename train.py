@@ -97,7 +97,7 @@ def train(args, seed_start, best_acc, best_seed, N, model, device, train_loader,
     return best_seed, best_acc
 
 def test(args, model, device, test_loader):
-    model.train()
+    model.eval()
     
     test_loss = 0
     correct = 0
@@ -108,8 +108,8 @@ def test(args, model, device, test_loader):
             test_loss += F.nll_loss(output, target, reduction='sum').item() # sum up batch loss
             pred = output.argmax(dim=1, keepdim=True) # get the index of the max log-probability
             correct += pred.eq(target.view_as(pred)).sum().item()/pred.size(0)
-            if batch_idx>10:
-                break
+            #if batch_idx>10:
+            #    break
 
     test_loss /= batch_idx#len(test_loader.dataset)
 
@@ -175,7 +175,7 @@ def main():
         print('2: using seed {}'.format(best_seed))
         torch.manual_seed(best_seed)
         model.apply(weights_init)
-        test(args, model, device, train_loader)#test_loader)
+        test(args, model, device, test_loader)
 
     if (args.save_model):
         torch.save(model.state_dict(),"mnist_cnn.pt")

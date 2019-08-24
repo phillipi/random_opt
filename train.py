@@ -47,8 +47,8 @@ def weights_init(m):
         #torch.nn.init.kaiming_uniform_(m.weight.data)
         #torch.nn.init.sparse_(m.weight.data, 0.9, std=0.01)
         torch.nn.init.normal_(m.weight.data, mean=0.0, std=1.0)
-        mask = torch.abs(m.weight.data)<3.0
-        m.weight.data[mask] = 0
+        #mask = torch.abs(m.weight.data)<3.0
+        #m.weight.data[mask] = 0
         torch.nn.init.normal_(m.bias, mean=0.0, std=1.0)
         #torch.nn.init.constant_(m.bias, 0)
 
@@ -176,7 +176,7 @@ def main():
                        ])),
         batch_size=args.test_batch_size, shuffle=False, **kwargs)
 
-    N_models = 10
+    N_models = 100
     models = []
     for i in range(0,N_models):
         models.append(Net().to(device))
@@ -186,7 +186,7 @@ def main():
     seed_start = seed_start_0
     N = 10000
     accs = np.array([])
-    for epoch in range(1, args.epochs + 1):
+    for epoch in range(1, 100):#args.epochs + 1):
         accs = np.concatenate((accs, train(args, seed_start, N, models[0], device, train_loader, epoch)))
         seed_start += N
         

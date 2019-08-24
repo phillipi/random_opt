@@ -97,6 +97,8 @@ def train(args, seed_start, N, model, device, train_loader, optimizer, epoch):
         
         if i % args.log_interval == 0:
             best_acc = np.max(accs)
+            ii = np.argsort(-accs)
+            print('1) using seed:', ii[0])
             print('(iter {}) best acc: {:.0f}%'.format(i, 100*best_acc))
     
     #return best_seed, best_acc
@@ -180,6 +182,7 @@ def main():
         
         ii = np.argsort(-accs)
         
+        print('2) using seed:', ii[0])
         torch.manual_seed(ii[0])
         model.apply(weights_init)
         test(args, model, device, test_loader)

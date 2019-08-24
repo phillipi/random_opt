@@ -15,8 +15,9 @@ class Net(nn.Module):
         super(Net, self).__init__()
         self.conv1 = nn.Conv2d(1, 20, 5, 1)
         self.conv2 = nn.Conv2d(20, 50, 5, 1)
-        self.fc1 = nn.Linear(4*4*50, 500)
-        self.fc2 = nn.Linear(500, 10)
+        #self.fc1 = nn.Linear(4*4*50, 500)
+        #self.fc2 = nn.Linear(500, 10)
+        self.fc1 = nn.Linear(4*4*50, 10)
 
     def forward(self, x):
         x = F.relu(self.conv1(x))
@@ -24,8 +25,9 @@ class Net(nn.Module):
         x = F.relu(self.conv2(x))
         x = F.max_pool2d(x, 2, 2)
         x = x.view(-1, 4*4*50)
-        x = F.relu(self.fc1(x))
-        x = self.fc2(x)
+        #x = F.relu(self.fc1(x))
+        #x = self.fc2(x)
+        x = self.fc1(x)
         return F.log_softmax(x, dim=1)
     
 def weights_init(m):
@@ -36,9 +38,9 @@ def weights_init(m):
         #torch.nn.init.normal_(m.weight.data, mean=0.0, std=1.0)
         torch.nn.init.normal_(m.bias, mean=0.0, std=1.0)
     elif isinstance(m, nn.Linear):
-        #torch.nn.init.xavier_uniform(m.weight.data)
+        torch.nn.init.xavier_uniform(m.weight.data)
         #torch.nn.init.kaiming_uniform_(m.weight.data)
-        torch.nn.init.sparse_(m.weight.data, 0.9, std=0.01)
+        #torch.nn.init.sparse_(m.weight.data, 0.9, std=0.01)
         #torch.nn.init.normal_(m.weight.data, mean=0.0, std=1.0)
         torch.nn.init.normal_(m.bias, mean=0.0, std=1.0)
 
@@ -106,7 +108,7 @@ def main():
                         help='disables CUDA training')
     parser.add_argument('--seed', type=int, default=1, metavar='S',
                         help='random seed (default: 1)')
-    parser.add_argument('--log-interval', type=int, default=10, metavar='N',
+    parser.add_argument('--log-interval', type=int, default=1000, metavar='N',
                         help='how many batches to wait before logging training status')
     
     parser.add_argument('--save-model', action='store_true', default=False,

@@ -98,9 +98,6 @@ def train(args, seed_start, best_acc, best_seed, N, model, device, train_loader,
 
 def test(args, model, device, test_loader):
     model.train()
-    for batch_idx, (data, target) in enumerate(test_loader):
-        data, target = data.to(device), target.to(device)
-        break # just load one batch
     
     test_loss = 0
     correct = 0

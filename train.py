@@ -40,8 +40,8 @@ def weights_init(m):
         torch.nn.init.normal_(m.weight.data, mean=0.0, std=1.0)
         #mask = torch.abs(m.weight.data)<2.0
         #m.weight.data[mask] = 0
-        #torch.nn.init.normal_(m.bias, mean=0.0, std=1.0)
-        torch.nn.init.constant_(m.bias, 0)
+        torch.nn.init.normal_(m.bias, mean=0.0, std=1.0)
+        #torch.nn.init.constant_(m.bias, 0)
     elif isinstance(m, nn.Linear):
         #torch.nn.init.xavier_uniform(m.weight.data)
         #torch.nn.init.kaiming_uniform_(m.weight.data)
@@ -49,8 +49,8 @@ def weights_init(m):
         torch.nn.init.normal_(m.weight.data, mean=0.0, std=1.0)
         mask = torch.abs(m.weight.data)<3.0
         m.weight.data[mask] = 0
-        #torch.nn.init.normal_(m.bias, mean=0.0, std=1.0)
-        torch.nn.init.constant_(m.bias, 0)
+        torch.nn.init.normal_(m.bias, mean=0.0, std=1.0)
+        #torch.nn.init.constant_(m.bias, 0)
 
 def train(args, seed_start, best_acc, best_seed, N, model, device, train_loader, optimizer, epoch):
     
@@ -115,7 +115,7 @@ def test(args, model, device, test_loader):
 def main():
     # Training settings
     parser = argparse.ArgumentParser(description='PyTorch MNIST Example')
-    parser.add_argument('--batch-size', type=int, default=1024, metavar='N',
+    parser.add_argument('--batch-size', type=int, default=256, metavar='N',
                         help='input batch size for training (default: 256)')
     parser.add_argument('--test-batch-size', type=int, default=1000, metavar='N',
                         help='input batch size for testing (default: 1000)')

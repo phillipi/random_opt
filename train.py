@@ -112,7 +112,7 @@ def test(args, model, device, test_loader):
 
     print('\nTest set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
         test_loss, correct, batch_idx,
-        100. * correct / batch_idx)))
+        100. * correct / batch_idx))
 
 def main():
     # Training settings

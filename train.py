@@ -68,7 +68,7 @@ def train(args, seed_start, N, model, device, train_loader, epoch):
         break # just load one batch
     
     accs = np.zeros(N)
-    losses = np.ones(N)
+    losses = np.ones(N) * np.inf
     for i in range(0,N):
         
         # rand init

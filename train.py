@@ -79,10 +79,10 @@ def train(args, seed_start, N, model, device, train_loader, epoch):
         # eval model
         output = model(data)
         loss = F.nll_loss(output, target, reduction='sum').item() # sum up batch loss
-        pred = output.argmax(dim=1, keepdim=True) # get the index of the max log-probability
-        acc = pred.eq(target.view_as(pred)).sum().item()/pred.size(0)
+        #pred = output.argmax(dim=1, keepdim=True) # get the index of the max log-probability
+        #acc = pred.eq(target.view_as(pred)).sum().item()/pred.size(0)
         
-        accs[i] = acc
+        #accs[i] = acc
         losses[i] = loss
         
         '''

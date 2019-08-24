@@ -31,7 +31,7 @@ class Net(nn.Module):
 def weights_init(m):
     if isinstance(m, nn.Conv2d):
         torch.nn.init.xavier_uniform(m.weight.data)
-    elif if isinstance(m, nn.Linear):
+    elif isinstance(m, nn.Linear):
         torch.nn.init.xavier_uniform(m.weight.data)
 
 def train(args, model, device, train_loader, optimizer, epoch):

@@ -179,7 +179,7 @@ def main():
     N_models = 10
     models = []
     for i in range(0,N_models):
-        models = models.append(Net().to(device))
+        models.append(Net().to(device))
     optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum)
 
     seed_start_0 = np.random.randint(10000)

@@ -83,8 +83,7 @@ def train(args, seed_start, N, model, device, train_loader, epoch):
 
         # linear layer on top
         A = torch.inverse(torch.mm(output.t(), output))
-        W = torch.mv(torch.mm(A, output.t()), target)
-
+        W = torch.mv(torch.mm(A, output.t()), torch.FloatTensor(target))
         output = torch.mm(W, output)
         
         loss = F.nll_loss(output, target, reduction='sum').item() # sum up batch loss

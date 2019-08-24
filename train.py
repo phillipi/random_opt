@@ -189,7 +189,7 @@ def main():
     seed_start = seed_start_0
     N = 10000
     accs = np.array([])
-    accs, losses = np.array([])
+    losses = np.array([])
     for epoch in range(1, 100):#args.epochs + 1):
         new_accs, new_losses = train(args, seed_start, N, models[0], device, train_loader, epoch)
         accs = np.concatenate((accs, new_accs))

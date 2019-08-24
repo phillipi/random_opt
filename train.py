@@ -14,21 +14,22 @@ class Net(nn.Module):
     def __init__(self):
         super(Net, self).__init__()
         self.conv1 = nn.Conv2d(1, 20, 5, 1)
-        self.conv2 = nn.Conv2d(20, 10, 5, 1)
-        #self.conv2 = nn.Conv2d(20, 50, 5, 1)
-        #self.fc1 = nn.Linear(4*4*50, 500)
-        #self.fc2 = nn.Linear(500, 10)
-        self.fc1 = nn.Linear(4*4*10, 10)
+        #self.conv2 = nn.Conv2d(20, 10, 5, 1)
+        self.conv2 = nn.Conv2d(20, 50, 5, 1)
+        self.fc1 = nn.Linear(4*4*50, 500)
+        self.fc2 = nn.Linear(500, 10)
+        #self.fc1 = nn.Linear(4*4*10, 10)
 
     def forward(self, x):
         x = F.relu(self.conv1(x))
         x = F.max_pool2d(x, 2, 2)
         x = F.relu(self.conv2(x))
         x = F.max_pool2d(x, 2, 2)
-        x = x.view(-1, 4*4*10)
-        #x = F.relu(self.fc1(x))
-        #x = self.fc2(x)
-        x = self.fc1(x)
+        #x = x.view(-1, 4*4*10)
+        x = x.view(-1, 4*4*50)
+        x = F.relu(self.fc1(x))
+        x = self.fc2(x)
+        #x = self.fc1(x)
         return F.log_softmax(x, dim=1)
     
 def weights_init(m):
@@ -45,7 +46,7 @@ def weights_init(m):
         #torch.nn.init.kaiming_uniform_(m.weight.data)
         #torch.nn.init.sparse_(m.weight.data, 0.9, std=0.01)
         torch.nn.init.normal_(m.weight.data, mean=0.0, std=1.0)
-        mask = torch.abs(m.weight.data)<3.0
+        mask = torch.abs(m.weight.data)<2.0
         m.weight.data[mask] = 0
         torch.nn.init.normal_(m.bias, mean=0.0, std=1.0)
 

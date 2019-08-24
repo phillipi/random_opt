@@ -48,6 +48,7 @@ def train(args, model, device, train_loader, optimizer, epoch):
     for i in range(0,N):
         
         # rand init
+        torch.manual_seed(0)
         model.apply(weights_init)
         
         # eval model

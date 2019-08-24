@@ -173,7 +173,8 @@ def main():
     model = Net().to(device)
     optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum)
 
-    seed_start = np.random.randint(10000)
+    seed_start_0 = np.random.randint(10000)
+    seed_start = seed_start_0
     N = 10000
     accs = np.array([])
     for epoch in range(1, args.epochs + 1):
@@ -182,8 +183,8 @@ def main():
         
         ii = np.argsort(-accs)
         
-        print('2) using seed:', ii[0])
-        torch.manual_seed(ii[0])
+        print('2) using seed:', ii[0]+seed_start_0)
+        torch.manual_seed(ii[0]+seed_start_0)
         model.apply(weights_init)
         test(args, model, device, test_loader)
     '''

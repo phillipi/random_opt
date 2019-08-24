@@ -68,7 +68,7 @@ def train(args, seed_start, N, model, device, train_loader, epoch):
         break # just load one batch
     
     accs = np.zeros(N)
-    losses = np.zeros(N)
+    losses = np.ones(N)
     for i in range(0,N):
         
         # rand init
@@ -108,7 +108,7 @@ def train(args, seed_start, N, model, device, train_loader, epoch):
             #best_acc = np.max(accs)
             #print('(iter {}) best acc: {:.0f}%'.format(i, 100*best_acc))
             best_loss = np.min(losses)
-            print('(iter {}) best loss: {}%'.format(i, best_loss))
+            print('(iter {}) best loss: {}'.format(i, best_loss))
     
     #return best_seed, best_acc
     return accs, losses

@@ -29,7 +29,10 @@ class Net(nn.Module):
         return F.log_softmax(x, dim=1)
     
 def weights_init(m):
-    torch.nn.init.xavier_uniform(m.weight.data)
+    if isinstance(m, nn.Conv2d):
+        torch.nn.init.xavier_uniform(m.weight.data)
+    elif if isinstance(m, nn.Linear):
+        torch.nn.init.xavier_uniform(m.weight.data)
 
 def train(args, model, device, train_loader, optimizer, epoch):
     
@@ -39,7 +42,7 @@ def train(args, model, device, train_loader, optimizer, epoch):
         data, target = data.to(device), target.to(device)
         break
     
-    N = 100000
+    N = 1000000
     best_acc = 0.0
     for i in range(0,N):
         # init

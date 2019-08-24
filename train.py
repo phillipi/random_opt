@@ -34,7 +34,7 @@ def weights_init(m):
     elif isinstance(m, nn.Linear):
         torch.nn.init.xavier_uniform(m.weight.data)
 
-def train(args, model, device, train_loader, optimizer, epoch):
+def train(args, seed_start, N, model, device, train_loader, optimizer, epoch):
     
     model.train()
     
@@ -43,22 +43,27 @@ def train(args, model, device, train_loader, optimizer, epoch):
         data, target = data.to(device), target.to(device)
         break # just load one batch
     
-    N = 100000000
     best_acc = 0.0
+    best_seed = 0
     for i in range(0,N):
         
         # rand init
-        torch.manual_seed(0)
+        torch.manual_seed(i+seed_start)
         model.apply(weights_init)
         
         # eval model
         output = model(data)
         pred = output.argmax(dim=1, keepdim=True) # get the index of the max log-probability
         acc = pred.eq(target.view_as(pred)).sum().item()/pred.size(0)
-        best_acc = np.maximum(acc, best_acc)
+        
+        if acc > best_acc"
+            best_acc = acc
+            best_seed = i
         
         if i % args.log_interval == 0:
             print('(iter {}) best acc: {:.0f}%'.format(i, 100*best_acc))
+    
+    return best_seed
 
 def test(args, model, device, test_loader):
     model.eval()
@@ -126,8 +131,13 @@ def main():
     model = Net().to(device)
     optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum)
 
+    seed_start = 0
+    N = 100000
     for epoch in range(1, args.epochs + 1):
-        train(args, model, device, train_loader, optimizer, epoch)
+        best_seed = train(args, seed_start, N, model, device, train_loader, optimizer, epoch)
+        seed_start += N
+        torch.manual_seed(best_seed)
+        model.apply(weights_init)
         test(args, model, device, test_loader)
 
     if (args.save_model):

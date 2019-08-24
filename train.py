@@ -29,15 +29,18 @@ class Net(nn.Module):
         return F.log_softmax(x, dim=1)
     
 def train(args, model, device, train_loader, optimizer, epoch):
-    model.train()
     
     for batch_idx, (data, target) in enumerate(train_loader):
         data, target = data.to(device), target.to(device)
         break
     
-    N = 10000
+    N = 100000
     best_acc = 0.0
     for i in range(0,N):
+        # init
+        model = Net().to(device)
+        model.train()
+        
         output = model(data)
         #loss = F.nll_loss(output, target)
         pred = output.argmax(dim=1, keepdim=True) # get the index of the max log-probability

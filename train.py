@@ -167,7 +167,7 @@ def main():
     for epoch in range(1, args.epochs + 1):
         best_seed, best_acc = train(args, seed_start, best_acc, best_seed, N, model, device, train_loader, optimizer, epoch)
         seed_start += N
-        torch.manual_seed(best_seed+1)
+        torch.manual_seed(best_seed)
         model.apply(weights_init)
         test(args, model, device, test_loader)
 

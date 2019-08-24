@@ -179,7 +179,7 @@ def main():
                        ])),
         batch_size=args.test_batch_size, shuffle=False, **kwargs)
 
-    N_models = 1000
+    N_models = 10000
     models = []
     for i in range(0,N_models):
         models.append(Net().to(device))
@@ -187,7 +187,7 @@ def main():
 
     seed_start_0 = np.random.randint(10000)
     seed_start = seed_start_0
-    N = 100000
+    N = 1000000
     accs = np.array([])
     losses = np.array([])
     for epoch in range(1, 100):#args.epochs + 1):

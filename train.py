@@ -62,6 +62,7 @@ def train(args, seed_start, N, model, device, train_loader, epoch):
         break # just load one batch
     
     accs = np.zeros(N)
+    losses = np.zeros(N)
     for i in range(0,N):
         
         # rand init
@@ -71,10 +72,12 @@ def train(args, seed_start, N, model, device, train_loader, epoch):
         
         # eval model
         output = model(data)
+        loss = F.nll_loss(output, target, reduction='sum').item() # sum up batch loss
         pred = output.argmax(dim=1, keepdim=True) # get the index of the max log-probability
         acc = pred.eq(target.view_as(pred)).sum().item()/pred.size(0)
         
         accs[i] = acc
+        losses[i] = loss
         
         '''
         if acc > best_acc:
@@ -100,7 +103,7 @@ def train(args, seed_start, N, model, device, train_loader, epoch):
             print('(iter {}) best acc: {:.0f}%'.format(i, 100*best_acc))
     
     #return best_seed, best_acc
-    return accs
+    return accs, losses
 
 def test(args, models, device, test_loader):
     
@@ -186,11 +189,14 @@ def main():
     seed_start = seed_start_0
     N = 10000
     accs = np.array([])
+    accs, losses = np.array([])
     for epoch in range(1, 100):#args.epochs + 1):
-        accs = np.concatenate((accs, train(args, seed_start, N, models[0], device, train_loader, epoch)))
+        new_accs, new_losses = train(args, seed_start, N, models[0], device, train_loader, epoch)
+        accs = np.concatenate((accs, new_accs))
+        losses = np.concatenate((losses, new_losses))
         seed_start += N
         
-        ii = np.argsort(-accs)
+        ii = np.argsort(losses)
         
         for i in range(0,N_models):
             print('top seed {}: {} (acc: {}%)'.format(i, ii[i], accs[ii[i]]))

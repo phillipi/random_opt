@@ -216,8 +216,9 @@ def main():
         
         ii = np.argsort(losses)
         
-        weights = torch.exp(-losses[ii[0:N_models]]*0.1)
-        weights = weights/torch.sum(weights)
+        losses = losses[ii[0:N_models]]
+        weights = np.exp(-losses*0.01)
+        weights = weights/np.sum(weights)
         
         for i in range(0,N_models):
             #print('top seed {}: {} (acc: {}%)'.format(i, ii[i], accs[ii[i]]))

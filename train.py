@@ -30,19 +30,22 @@ class Net(nn.Module):
     
 def train(args, model, device, train_loader, optimizer, epoch):
     model.train()
+    
+    for batch_idx, (data, target) in enumerate(train_loader):
+        data, target = data.to(device), target.to(device)
+        break
+    
     N = 10000
     best_acc = 0.0
     for i in range(0,N):
-        for batch_idx, (data, target) in enumerate(train_loader):
-            data, target = data.to(device), target.to(device)
-            output = model(data)
-            #loss = F.nll_loss(output, target)
-            pred = output.argmax(dim=1, keepdim=True) # get the index of the max log-probability
-            acc = pred.eq(target.view_as(pred)).sum().item()/pred.size(0)
-            #correct / len(test_loader.dataset)
-            print('acc', acc)
-            best_acc = np.min(acc, best_acc)
-            break
+        output = model(data)
+        #loss = F.nll_loss(output, target)
+        pred = output.argmax(dim=1, keepdim=True) # get the index of the max log-probability
+        acc = pred.eq(target.view_as(pred)).sum().item()/pred.size(0)
+        #correct / len(test_loader.dataset)
+        print('acc', acc)
+        best_acc = np.min(acc, best_acc)
+        
         if i % args.log_interval == 0:
             print('best acc: {:.0f}%'.format(best_acc))
     

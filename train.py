@@ -97,6 +97,10 @@ def train(args, seed_start, best_acc, best_seed, N, model, device, train_loader,
 
 def test(args, model, device, test_loader):
     model.train()
+    for batch_idx, (data, target) in enumerate(test_loader):
+        data, target = data.to(device), target.to(device)
+        break # just load one batch
+    
     test_loss = 0
     correct = 0
     with torch.no_grad():
@@ -151,13 +155,13 @@ def main():
                            transforms.ToTensor(),
                            transforms.Normalize((0.1307,), (0.3081,))
                        ])),
-        batch_size=args.batch_size, shuffle=True, **kwargs)
+        batch_size=args.batch_size, shuffle=False, **kwargs)
     test_loader = torch.utils.data.DataLoader(
         datasets.MNIST('../data', train=False, transform=transforms.Compose([
                            transforms.ToTensor(),
                            transforms.Normalize((0.1307,), (0.3081,))
                        ])),
-        batch_size=args.test_batch_size, shuffle=True, **kwargs)
+        batch_size=args.test_batch_size, shuffle=False, **kwargs)
 
 
     model = Net().to(device)

@@ -174,9 +174,9 @@ def main():
                            transforms.ToTensor(),
                            transforms.Normalize((0.1307,), (0.3081,))
                        ])),
-        batch_size=args.test_batch_size, shuffle=True, **kwargs)
+        batch_size=args.test_batch_size, shuffle=False, **kwargs)
 
-    N_models = 100
+    N_models = 10
     models = []
     for i in range(0,N_models):
         models.append(Net().to(device))

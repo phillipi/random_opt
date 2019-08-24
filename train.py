@@ -219,6 +219,7 @@ def main():
         losses = losses[ii[0:N_models]]
         weights = np.exp(-losses*0.01)
         weights = weights/np.sum(weights)
+        print('weights:',weights[1:100])
         
         for i in range(0,N_models):
             #print('top seed {}: {} (acc: {}%)'.format(i, ii[i], accs[ii[i]]))

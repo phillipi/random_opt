@@ -96,7 +96,7 @@ def train(args, seed_start, best_acc, best_seed, N, model, device, train_loader,
     return best_seed, best_acc
 
 def test(args, model, device, test_loader):
-    model.eval()
+    model.train()
     test_loss = 0
     correct = 0
     with torch.no_grad():

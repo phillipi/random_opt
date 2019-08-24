@@ -82,10 +82,11 @@ def train(args, seed_start, N, model, device, train_loader, epoch):
         output = model(data)
 
         # linear layer on top
-        import pdb; pdb.set_trace()
+        '''
         A = torch.inverse(torch.mm(output.t(), output))
-        W = torch.mv(torch.mm(A, output.t()), torch.FloatTensor(target))
+        W = torch.mv(torch.mm(A, output.t()), target.float())
         output = torch.mm(W, output)
+        '''
         
         loss = F.nll_loss(output, target, reduction='sum').item() # sum up batch loss
         #pred = output.argmax(dim=1, keepdim=True) # get the index of the max log-probability
@@ -122,7 +123,7 @@ def train(args, seed_start, N, model, device, train_loader, epoch):
     #return best_seed, best_acc
     return accs, losses
 
-def test(args, models, device, test_loader):
+def test(args, models, weights, device, test_loader):
     
     for model in models:
         model.eval()
@@ -134,11 +135,11 @@ def test(args, models, device, test_loader):
             data, target = data.to(device), target.to(device)
             
             output = None
-            for model in models:
+            for model_idx, model in enumerate(models):
                 if output is None:
-                    output = model(data)
+                    output = weights[model_idx]*model(data)
                 else:
-                    output += model(data)
+                    output += weights[model_idx]*model(data)
             
             #test_loss += F.nll_loss(output, target, reduction='sum').item() # sum up batch loss
             pred = output.argmax(dim=1, keepdim=True) # get the index of the max log-probability
@@ -215,11 +216,14 @@ def main():
         
         ii = np.argsort(losses)
         
+        weights = torch.exp(-losses[ii[0:N_models]]*0.1)
+        weights = weights/torch.sum(weights)
+        
         for i in range(0,N_models):
             #print('top seed {}: {} (acc: {}%)'.format(i, ii[i], accs[ii[i]]))
             torch.manual_seed(ii[i]+seed_start_0)
             models[i].apply(weights_init)
-        test(args, models, device, test_loader)
+        test(args, models, weights, device, test_loader)
     '''
     best_acc = 0.0
     best_seed = 0

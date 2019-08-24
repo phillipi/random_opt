@@ -31,7 +31,7 @@ class Net(nn.Module):
 def train(args, model, device, train_loader, optimizer, epoch):
     model.train()
     N = 10000
-    best_acc = 0
+    best_acc = 0.0
     for i in range(0,N):
         for batch_idx, (data, target) in enumerate(train_loader):
             data, target = data.to(device), target.to(device)
@@ -40,7 +40,6 @@ def train(args, model, device, train_loader, optimizer, epoch):
             pred = output.argmax(dim=1, keepdim=True) # get the index of the max log-probability
             acc = pred.eq(target.view_as(pred)).sum().item()/pred.size(0)
             #correct / len(test_loader.dataset)
-            import pdb; pdb.set_trace()
             best_acc = np.min(acc, best_acc)
             break
         if i % args.log_interval == 0:

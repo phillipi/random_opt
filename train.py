@@ -45,7 +45,7 @@ def train(args, model, device, train_loader, optimizer, epoch):
         # init
         #model = Net().to(device)
         #model.train()
-        model.apply(model.weight_init)
+        model.apply(model.weights_init)
         
         output = model(data)
         #loss = F.nll_loss(output, target)

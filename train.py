@@ -80,6 +80,13 @@ def train(args, seed_start, N, model, device, train_loader, epoch):
         
         # eval model
         output = model(data)
+
+        # linear layer on top
+        A = torch.inverse(torch.mm(output.t(), output))
+        W = torch.mv(torch.mm(A, output.t()), target)
+
+        output = torch.mm(W, output)
+        
         loss = F.nll_loss(output, target, reduction='sum').item() # sum up batch loss
         #pred = output.argmax(dim=1, keepdim=True) # get the index of the max log-probability
         #acc = pred.eq(target.view_as(pred)).sum().item()/pred.size(0)

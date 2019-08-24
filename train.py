@@ -75,7 +75,6 @@ def train(args, seed_start, best_acc, best_seed, N, model, device, train_loader,
         if acc > best_acc:
             
             # double check
-            print('acc1:', acc)
             acc = 0
             for batch_idx, (data, target) in enumerate(train_loader):
                 data, target = data.to(device), target.to(device)
@@ -85,7 +84,6 @@ def train(args, seed_start, best_acc, best_seed, N, model, device, train_loader,
                 if batch_idx>10:
                     break
             acc = acc/batch_idx
-            print('acc2:', acc)
             
             if acc > best_acc:
                 best_acc = acc
@@ -165,11 +163,11 @@ def main():
     seed_start = 0
     best_acc = 0.0
     best_seed = 0
-    N = 40000
+    N = 10000
     for epoch in range(1, args.epochs + 1):
         best_seed, best_acc = train(args, seed_start, best_acc, best_seed, N, model, device, train_loader, optimizer, epoch)
         seed_start += N
-        torch.manual_seed(best_seed)
+        torch.manual_seed(best_seed+1)
         model.apply(weights_init)
         test(args, model, device, test_loader)
 

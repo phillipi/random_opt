@@ -38,8 +38,8 @@ def weights_init(m):
         #torch.nn.init.kaiming_uniform_(m.weight.data)
         #torch.nn.init.sparse_(m.weight.data, 0.9, std=0.01)
         torch.nn.init.normal_(m.weight.data, mean=0.0, std=1.0)
-        mask = torch.abs(m.weight.data)<3.0
-        m.weight.data[mask] = 0
+        #mask = torch.abs(m.weight.data)<2.0
+        #m.weight.data[mask] = 0
         #torch.nn.init.normal_(m.bias, mean=0.0, std=1.0)
         torch.nn.init.constant_(m.bias, 0)
     elif isinstance(m, nn.Linear):
@@ -73,8 +73,21 @@ def train(args, seed_start, best_acc, best_seed, N, model, device, train_loader,
         acc = pred.eq(target.view_as(pred)).sum().item()/pred.size(0)
         
         if acc > best_acc:
-            best_acc = acc
-            best_seed = i
+            
+            # double check
+            acc = 0
+            for batch_idx, (data, target) in enumerate(train_loader):
+                data, target = data.to(device), target.to(device)
+                output = model(data)
+                pred = output.argmax(dim=1, keepdim=True) # get the index of the max log-probability
+                acc += pred.eq(target.view_as(pred)).sum().item()/pred.size(0)
+                if batch_idx>10:
+                    break
+            acc = acc/batch_idx
+            
+            if acc > best_acc:
+                best_acc = acc
+                best_seed = i
         
         if i % args.log_interval == 0:
             print('(iter {}) best acc: {:.0f}%'.format(i, 100*best_acc))
@@ -102,7 +115,7 @@ def test(args, model, device, test_loader):
 def main():
     # Training settings
     parser = argparse.ArgumentParser(description='PyTorch MNIST Example')
-    parser.add_argument('--batch-size', type=int, default=256, metavar='N',
+    parser.add_argument('--batch-size', type=int, default=64, metavar='N',
                         help='input batch size for training (default: 256)')
     parser.add_argument('--test-batch-size', type=int, default=1000, metavar='N',
                         help='input batch size for testing (default: 1000)')

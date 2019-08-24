@@ -30,13 +30,15 @@ class Net(nn.Module):
     
 def weights_init(m):
     if isinstance(m, nn.Conv2d):
-        #torch.nn.init.xavier_uniform(m.weight.data)
-        torch.nn.init.normal_(m.weight.data, mean=0.0, std=1.0)
-        torch.nn.init.normal_(m.bias, mean=0.0, std=1.0)
+        torch.nn.init.xavier_uniform(m.weight.data)
+        torch.nn.init.xavier_uniform(m.bias.data)
+        #torch.nn.init.normal_(m.weight.data, mean=0.0, std=1.0)
+        #torch.nn.init.normal_(m.bias, mean=0.0, std=1.0)
     elif isinstance(m, nn.Linear):
-        #torch.nn.init.xavier_uniform(m.weight.data)
-        torch.nn.init.normal_(m.weight.data, mean=0.0, std=1.0)
-        torch.nn.init.normal_(m.bias, mean=0.0, std=1.0)
+        torch.nn.init.xavier_uniform(m.weight.data)
+        torch.nn.init.xavier_uniform(m.bias.data)
+        #torch.nn.init.normal_(m.weight.data, mean=0.0, std=1.0)
+        #torch.nn.init.normal_(m.bias, mean=0.0, std=1.0)
 
 def train(args, seed_start, best_acc, best_seed, N, model, device, train_loader, optimizer, epoch):
     

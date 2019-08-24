@@ -193,6 +193,7 @@ def main():
         ii = np.argsort(-accs)
         
         for i in range(0,N_models):
+            print('top seed {}: {} (acc: {}%)'.format(i, ii[i], accs[ii[i]]))
             torch.manual_seed(ii[i]+seed_start_0)
             models[i].apply(weights_init)
         test(args, models, device, test_loader)

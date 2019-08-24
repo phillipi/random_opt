@@ -61,7 +61,6 @@ def train(args, seed_start, best_acc, best_seed, N, model, device, train_loader,
         if acc > best_acc:
             best_acc = acc
             best_seed = i
-        print('acc:', acc)
         
         if i % args.log_interval == 0:
             print('(iter {}) best acc: {:.0f}%'.format(i, 100*best_acc))

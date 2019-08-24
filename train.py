@@ -34,7 +34,7 @@ def weights_init(m):
     elif isinstance(m, nn.Linear):
         torch.nn.init.xavier_uniform(m.weight.data)
 
-def train(args, seed_start, N, model, device, train_loader, optimizer, epoch):
+def train(args, seed_start, best_acc, best_seed, N, model, device, train_loader, optimizer, epoch):
     
     model.train()
     
@@ -43,8 +43,6 @@ def train(args, seed_start, N, model, device, train_loader, optimizer, epoch):
         data, target = data.to(device), target.to(device)
         break # just load one batch
     
-    best_acc = 0.0
-    best_seed = 0
     for i in range(0,N):
         
         # rand init
@@ -86,7 +84,7 @@ def test(args, model, device, test_loader):
 def main():
     # Training settings
     parser = argparse.ArgumentParser(description='PyTorch MNIST Example')
-    parser.add_argument('--batch-size', type=int, default=256, metavar='N',
+    parser.add_argument('--batch-size', type=int, default=1024, metavar='N',
                         help='input batch size for training (default: 256)')
     parser.add_argument('--test-batch-size', type=int, default=1000, metavar='N',
                         help='input batch size for testing (default: 1000)')
@@ -132,9 +130,11 @@ def main():
     optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum)
 
     seed_start = 0
-    N = 100000
+    best_acc = 0.0
+    best_seed = 0
+    N = 10000
     for epoch in range(1, args.epochs + 1):
-        best_seed = train(args, seed_start, N, model, device, train_loader, optimizer, epoch)
+        best_seed = train(args, seed_start, best_acc, best_seed, N, model, device, train_loader, optimizer, epoch)
         seed_start += N
         torch.manual_seed(best_seed)
         model.apply(weights_init)

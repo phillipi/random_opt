@@ -28,8 +28,8 @@ class Net(nn.Module):
         x = self.fc2(x)
         return F.log_softmax(x, dim=1)
     
-    def weights_init(m):
-        torch.nn.init.xavier_uniform(m.weight.data)
+def weights_init(m):
+    torch.nn.init.xavier_uniform(m.weight.data)
 
 def train(args, model, device, train_loader, optimizer, epoch):
     
@@ -45,7 +45,7 @@ def train(args, model, device, train_loader, optimizer, epoch):
         # init
         #model = Net().to(device)
         #model.train()
-        model.apply(model.weights_init)
+        model.apply(weights_init)
         
         output = model(data)
         #loss = F.nll_loss(output, target)

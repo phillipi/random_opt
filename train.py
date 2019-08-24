@@ -160,7 +160,7 @@ def main():
     model = Net().to(device)
     optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum)
 
-    seed_start = 0
+    seed_start = np.random.randint(10000)
     best_acc = 0.0
     best_seed = 0
     N = 10000

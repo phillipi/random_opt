@@ -163,7 +163,7 @@ def main():
     seed_start = 0
     best_acc = 0.0
     best_seed = 0
-    N = 10000
+    N = 1000
     for epoch in range(1, args.epochs + 1):
         best_seed, best_acc = train(args, seed_start, best_acc, best_seed, N, model, device, train_loader, optimizer, epoch)
         seed_start += N

@@ -180,7 +180,7 @@ def main():
     models = []
     for i in range(0,N_models):
         models.append(Net().to(device))
-    optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum)
+    #optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum)
 
     seed_start_0 = np.random.randint(10000)
     seed_start = seed_start_0
@@ -208,8 +208,8 @@ def main():
         test(args, model, device, test_loader)
     '''
 
-    if (args.save_model):
-        torch.save(model.state_dict(),"mnist_cnn.pt")
+    #if (args.save_model):
+    #    torch.save(model.state_dict(),"mnist_cnn.pt")
         
 if __name__ == '__main__':
     main()

@@ -64,7 +64,8 @@ def train(args, seed_start, best_acc, best_seed, N, model, device, train_loader,
     for i in range(0,N):
         
         # rand init
-        torch.manual_seed(i+seed_start)
+        seed = i+seed_start
+        torch.manual_seed(seed)
         model.apply(weights_init)
         
         # eval model
@@ -87,8 +88,8 @@ def train(args, seed_start, best_acc, best_seed, N, model, device, train_loader,
             
             if acc > best_acc:
                 best_acc = acc
-                best_seed = i
-                print('1: using seed {}'.format(i))
+                best_seed = seed
+                print('1: using seed {}'.format(best_seed))
         
         if i % args.log_interval == 0:
             print('(iter {}) best acc: {:.0f}%'.format(i, 100*best_acc))
@@ -161,7 +162,7 @@ def main():
                            transforms.ToTensor(),
                            transforms.Normalize((0.1307,), (0.3081,))
                        ])),
-        batch_size=args.test_batch_size, shuffle=False, **kwargs)
+        batch_size=args.test_batch_size, shuffle=True, **kwargs)
 
 
     model = Net().to(device)

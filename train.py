@@ -169,7 +169,7 @@ def main():
         seed_start += N
         torch.manual_seed(best_seed)
         model.apply(weights_init)
-        test(args, model, device, test_loader)
+        test(args, model, device, train_loader)
 
     if (args.save_model):
         torch.save(model.state_dict(),"mnist_cnn.pt")

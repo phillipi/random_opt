@@ -37,7 +37,7 @@ def train(args, model, device, train_loader, optimizer, epoch):
             output = model(data)
             #loss = F.nll_loss(output, target)
             pred = output.argmax(dim=1, keepdim=True) # get the index of the max log-probability
-            acc += pred.eq(target.view_as(pred)).mean().item()
+            acc = pred.eq(target.view_as(pred)).mean().item()
             #correct / len(test_loader.dataset)
             best_acc = np.min(acc, best_acc)
             break

@@ -56,7 +56,7 @@ def train(args, seed_start, N, model, device, train_loader, optimizer, epoch):
         pred = output.argmax(dim=1, keepdim=True) # get the index of the max log-probability
         acc = pred.eq(target.view_as(pred)).sum().item()/pred.size(0)
         
-        if acc > best_acc"
+        if acc > best_acc:
             best_acc = acc
             best_seed = i
         

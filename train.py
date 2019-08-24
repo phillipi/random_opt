@@ -52,7 +52,7 @@ def weights_init(m):
         torch.nn.init.normal_(m.bias, mean=0.0, std=1.0)
         #torch.nn.init.constant_(m.bias, 0)
 
-def train(args, seed_start, best_acc, best_seed, N, model, device, train_loader, optimizer, epoch):
+def train(args, seed_start, N, model, device, train_loader, optimizer, epoch):
     
     model.train()
     
@@ -174,7 +174,7 @@ def main():
     N = 10000
     accs = np.array([])
     for epoch in range(1, args.epochs + 1):
-        accs = np.concatenate((accs, train(args, seed_start, best_acc, best_seed, N, model, device, train_loader, optimizer, epoch)))
+        accs = np.concatenate((accs, train(args, seed_start, N, model, device, train_loader, optimizer, epoch)))
         seed_start += N
         
         ii = np.argsort(-accs)

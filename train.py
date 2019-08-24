@@ -104,15 +104,15 @@ def test(args, model, device, test_loader):
             output = model(data)
             test_loss += F.nll_loss(output, target, reduction='sum').item() # sum up batch loss
             pred = output.argmax(dim=1, keepdim=True) # get the index of the max log-probability
-            correct += pred.eq(target.view_as(pred)).sum().item()
+            correct += pred.eq(target.view_as(pred)).sum().item()/pred.size(0)
             if batch_idx>10:
                 break
 
     test_loss /= batch_idx#len(test_loader.dataset)
 
     print('\nTest set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
-        test_loss, correct, batch_idx,
-        100. * correct / batch_idx))
+        test_loss, correct, batch_idx,#len(test_loader.dataset),
+        100. * correct / batch_idx))#len(test_loader.dataset)))
 
 def main():
     # Training settings
@@ -171,7 +171,7 @@ def main():
         seed_start += N
         torch.manual_seed(best_seed)
         model.apply(weights_init)
-        test(args, model, device, train_loader)
+        test(args, model, device, train_loader)#test_loader)
 
     if (args.save_model):
         torch.save(model.state_dict(),"mnist_cnn.pt")

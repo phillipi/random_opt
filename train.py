@@ -46,7 +46,7 @@ def weights_init(m):
         #torch.nn.init.kaiming_uniform_(m.weight.data)
         #torch.nn.init.sparse_(m.weight.data, 0.9, std=0.01)
         torch.nn.init.normal_(m.weight.data, mean=0.0, std=1.0)
-        mask = torch.abs(m.weight.data)<4.0
+        mask = torch.abs(m.weight.data)<3.0
         m.weight.data[mask] = 0
         torch.nn.init.normal_(m.bias, mean=0.0, std=1.0)
 

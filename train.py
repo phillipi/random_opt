@@ -43,7 +43,7 @@ def train(args, model, device, train_loader, optimizer, epoch):
         pred = output.argmax(dim=1, keepdim=True) # get the index of the max log-probability
         acc = pred.eq(target.view_as(pred)).sum().item()/pred.size(0)
         #correct / len(test_loader.dataset)
-        best_acc = np.max(acc, best_acc)
+        best_acc = np.max(float(acc), best_acc)
         
         if i % args.log_interval == 0:
             print('best acc: {:.0f}%'.format(100*best_acc))

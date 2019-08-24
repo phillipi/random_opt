@@ -38,41 +38,26 @@ def train(args, model, device, train_loader, optimizer, epoch):
     
     model.train()
     
+    # load data
     for batch_idx, (data, target) in enumerate(train_loader):
         data, target = data.to(device), target.to(device)
-        break
+        break # just load one batch
     
     N = 1000000
     best_acc = 0.0
     for i in range(0,N):
-        # init
-        #model = Net().to(device)
-        #model.train()
+        
+        # rand init
         model.apply(weights_init)
         
+        # eval model
         output = model(data)
-        #loss = F.nll_loss(output, target)
         pred = output.argmax(dim=1, keepdim=True) # get the index of the max log-probability
         acc = pred.eq(target.view_as(pred)).sum().item()/pred.size(0)
-        #correct / len(test_loader.dataset)
         best_acc = np.maximum(acc, best_acc)
         
         if i % args.log_interval == 0:
             print('(iter {}) best acc: {:.0f}%'.format(i, 100*best_acc))
-    
-    '''
-    for batch_idx, (data, target) in enumerate(train_loader):
-        data, target = data.to(device), target.to(device)
-        optimizer.zero_grad()
-        output = model(data)
-        loss = F.nll_loss(output, target)
-        loss.backward()
-        optimizer.step()
-        if batch_idx % args.log_interval == 0:
-            print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
-                epoch, batch_idx * len(data), len(train_loader.dataset),
-                100. * batch_idx / len(train_loader), loss.item()))
-    '''
 
 def test(args, model, device, test_loader):
     model.eval()

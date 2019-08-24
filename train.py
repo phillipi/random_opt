@@ -61,6 +61,7 @@ def train(args, seed_start, best_acc, best_seed, N, model, device, train_loader,
         data, target = data.to(device), target.to(device)
         break # just load one batch
     
+    accs = np.zeros(N)
     for i in range(0,N):
         
         # rand init
@@ -73,10 +74,12 @@ def train(args, seed_start, best_acc, best_seed, N, model, device, train_loader,
         pred = output.argmax(dim=1, keepdim=True) # get the index of the max log-probability
         acc = pred.eq(target.view_as(pred)).sum().item()/pred.size(0)
         
+        accs[i] = acc
+        
+        '''
         if acc > best_acc:
             
             # double check
-            '''
             acc = 0
             for batch_idx, (data, target) in enumerate(train_loader):
                 data, target = data.to(device), target.to(device)
@@ -90,14 +93,13 @@ def train(args, seed_start, best_acc, best_seed, N, model, device, train_loader,
             if acc > best_acc:
                 best_acc = acc
                 best_seed = seed
-            '''
-            best_acc = acc
-            best_seed = seed
+        '''
         
         if i % args.log_interval == 0:
             print('(iter {}) best acc: {:.0f}%'.format(i, 100*best_acc))
     
-    return best_seed, best_acc
+    #return best_seed, best_acc
+    return accs
 
 def test(args, model, device, test_loader):
     model.eval()
@@ -169,6 +171,18 @@ def main():
     optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum)
 
     seed_start = np.random.randint(10000)
+    N = 10000
+    accs = np.array([])
+    for epoch in range(1, args.epochs + 1):
+        accs = np.cat((accs, train(args, seed_start, best_acc, best_seed, N, model, device, train_loader, optimizer, epoch))
+        seed_start += N
+        
+        ii = np.argsort(accs)
+        
+        torch.manual_seed(ii[0])
+        model.apply(weights_init)
+        test(args, model, device, test_loader)
+    '''
     best_acc = 0.0
     best_seed = 0
     N = 10000
@@ -178,6 +192,7 @@ def main():
         torch.manual_seed(best_seed)
         model.apply(weights_init)
         test(args, model, device, test_loader)
+    '''
 
     if (args.save_model):
         torch.save(model.state_dict(),"mnist_cnn.pt")

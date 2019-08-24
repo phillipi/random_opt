@@ -28,7 +28,12 @@ class Net(nn.Module):
         x = self.fc2(x)
         return F.log_softmax(x, dim=1)
     
+    def weights_init(m):
+        torch.nn.init.xavier_uniform(m.weight.data)
+
 def train(args, model, device, train_loader, optimizer, epoch):
+    
+    model.train()
     
     for batch_idx, (data, target) in enumerate(train_loader):
         data, target = data.to(device), target.to(device)
@@ -38,8 +43,9 @@ def train(args, model, device, train_loader, optimizer, epoch):
     best_acc = 0.0
     for i in range(0,N):
         # init
-        model = Net().to(device)
-        model.train()
+        #model = Net().to(device)
+        #model.train()
+        model.apply(model.weight_init)
         
         output = model(data)
         #loss = F.nll_loss(output, target)
@@ -49,7 +55,7 @@ def train(args, model, device, train_loader, optimizer, epoch):
         best_acc = np.maximum(acc, best_acc)
         
         if i % args.log_interval == 0:
-            print('best acc: {:.0f}%'.format(100*best_acc))
+            print('(iter {}) best acc: {:.0f}%'.format(i, 100*best_acc))
     
     '''
     for batch_idx, (data, target) in enumerate(train_loader):
@@ -86,8 +92,8 @@ def test(args, model, device, test_loader):
 def main():
     # Training settings
     parser = argparse.ArgumentParser(description='PyTorch MNIST Example')
-    parser.add_argument('--batch-size', type=int, default=64, metavar='N',
-                        help='input batch size for training (default: 64)')
+    parser.add_argument('--batch-size', type=int, default=256, metavar='N',
+                        help='input batch size for training (default: 256)')
     parser.add_argument('--test-batch-size', type=int, default=1000, metavar='N',
                         help='input batch size for testing (default: 1000)')
     parser.add_argument('--epochs', type=int, default=10, metavar='N',

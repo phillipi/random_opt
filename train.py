@@ -82,6 +82,7 @@ def train(args, seed_start, N, model, device, train_loader, epoch):
         output = model(data)
 
         # linear layer on top
+        import pdb; pdb.set_trace()
         A = torch.inverse(torch.mm(output.t(), output))
         W = torch.mv(torch.mm(A, output.t()), torch.FloatTensor(target))
         output = torch.mm(W, output)

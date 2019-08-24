@@ -174,10 +174,10 @@ def main():
     N = 10000
     accs = np.array([])
     for epoch in range(1, args.epochs + 1):
-        accs = np.cat((accs, train(args, seed_start, best_acc, best_seed, N, model, device, train_loader, optimizer, epoch)))
+        accs = np.concatenate((accs, train(args, seed_start, best_acc, best_seed, N, model, device, train_loader, optimizer, epoch)))
         seed_start += N
         
-        ii = np.argsort(accs)
+        ii = np.argsort(-accs)
         
         torch.manual_seed(ii[0])
         model.apply(weights_init)

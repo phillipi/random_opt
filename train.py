@@ -97,23 +97,30 @@ def train(args, seed_start, N, model, device, train_loader, optimizer, epoch):
         
         if i % args.log_interval == 0:
             best_acc = np.max(accs)
-            ii = np.argsort(-accs)
-            print('1) using seed:', ii[0]+seed_start)
             print('(iter {}) best acc: {:.0f}%'.format(i, 100*best_acc))
     
     #return best_seed, best_acc
     return accs
 
-def test(args, model, device, test_loader):
-    model.eval()
+def test(args, models, device, test_loader):
+    
+    for model in models:
+        model.eval()
     
     test_loss = 0
     correct = 0
     with torch.no_grad():
         for batch_idx, (data, target) in enumerate(test_loader):
             data, target = data.to(device), target.to(device)
-            output = model(data)
-            test_loss += F.nll_loss(output, target, reduction='sum').item() # sum up batch loss
+            
+            output = None
+            for model in models:
+                if output is None:
+                    output = model(data)
+                else:
+                    output += model(data)
+            
+            #test_loss += F.nll_loss(output, target, reduction='sum').item() # sum up batch loss
             pred = output.argmax(dim=1, keepdim=True) # get the index of the max log-probability
             correct += pred.eq(target.view_as(pred)).sum().item()/pred.size(0)
             #if batch_idx>10:
@@ -169,8 +176,10 @@ def main():
                        ])),
         batch_size=args.test_batch_size, shuffle=True, **kwargs)
 
-
-    model = Net().to(device)
+    N_models = 10
+    models = []
+    for i in range(0,N_models):
+        models = models.append(Net().to(device))
     optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum)
 
     seed_start_0 = np.random.randint(10000)
@@ -178,15 +187,15 @@ def main():
     N = 10000
     accs = np.array([])
     for epoch in range(1, args.epochs + 1):
-        accs = np.concatenate((accs, train(args, seed_start, N, model, device, train_loader, optimizer, epoch)))
+        accs = np.concatenate((accs, train(args, seed_start, N, models[0], device, train_loader, optimizer, epoch)))
         seed_start += N
         
         ii = np.argsort(-accs)
         
-        print('2) using seed:', ii[0]+seed_start_0)
-        torch.manual_seed(ii[0]+seed_start_0)
-        model.apply(weights_init)
-        test(args, model, device, test_loader)
+        for i in range(0,N_models):
+            torch.manual_seed(ii[i]+seed_start_0)
+            models[i].apply(weights_init)
+        test(args, models, device, test_loader)
     '''
     best_acc = 0.0
     best_seed = 0

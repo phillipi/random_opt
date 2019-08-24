@@ -43,7 +43,7 @@ def train(args, model, device, train_loader, optimizer, epoch):
         data, target = data.to(device), target.to(device)
         break # just load one batch
     
-    N = 10000000
+    N = 100000000
     best_acc = 0.0
     for i in range(0,N):
         

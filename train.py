@@ -9,10 +9,10 @@ import torch.optim as optim
 from torchvision import datasets, transforms
 import numpy as np
 
-class Net(nn.Module):
+class NetMNIST(nn.Module):
     def __init__(self):
         super(Net, self).__init__()
-        self.conv1 = nn.Conv2d(3, 20, 5, 1)
+        self.conv1 = nn.Conv2d(1, 20, 5, 1)
         #self.conv2 = nn.Conv2d(20, 10, 5, 1)
         self.conv2 = nn.Conv2d(20, 50, 5, 1)
         self.fc1 = nn.Linear(4*4*50, 500)
@@ -30,7 +30,25 @@ class Net(nn.Module):
         x = self.fc2(x)
         #x = self.fc1(x)
         return F.log_softmax(x, dim=1)
-    
+
+class NetCIFAR10(nn.Module):
+    def __init__(self):
+        super(Net, self).__init__()
+        self.conv1 = nn.Conv2d(1, 20, 5, 1)
+        self.conv2 = nn.Conv2d(20, 50, 5, 1)
+        self.fc1 = nn.Linear(5*5*50, 500)
+        self.fc2 = nn.Linear(500, 10)
+
+    def forward(self, x):
+        x = F.relu(self.conv1(x))
+        x = F.max_pool2d(x, 2, 2)
+        x = F.relu(self.conv2(x))
+        x = F.max_pool2d(x, 2, 2)
+        x = x.view(-1, 5*5*50)
+        x = F.relu(self.fc1(x))
+        x = self.fc2(x)
+        return F.log_softmax(x, dim=1)
+        
 def weights_init(m):
     if isinstance(m, nn.Conv2d):
         #torch.nn.init.uniform_(m.weight.data,-1.0,1.0)
@@ -86,7 +104,7 @@ def train(args, seed_start, N, model, device, train_loader, epoch):
         W = torch.mv(torch.mm(A, output.t()), target.float())
         output = torch.mm(W, output)
         '''
-        import pdb; pdb.set_trace()
+        
         loss = F.nll_loss(output, target, reduction='sum').item() # sum up batch loss
         #pred = output.argmax(dim=1, keepdim=True) # get the index of the max log-probability
         #acc = pred.eq(target.view_as(pred)).sum().item()/pred.size(0)
@@ -219,7 +237,7 @@ def main():
     #for i in range(0,N_models):
     #    models.append(Net().to(device))
     #optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum)
-    train_model = Net().to(device)
+    train_model = NetCIFAR10().to(device)
 
     seed_start_0 = np.random.randint(10000)
     seed_start = seed_start_0
@@ -243,7 +261,7 @@ def main():
         
         models = []
         for i in range(0,N_models):
-            models.append(Net().to(device))
+            models.append(NetCIFAR10().to(device))
             #print('top seed {}: {} (acc: {}%)'.format(i, ii[i], accs[ii[i]]))
             torch.manual_seed(ii[i]+seed_start_0)
             models[i].apply(weights_init)

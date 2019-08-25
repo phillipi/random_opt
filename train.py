@@ -197,7 +197,7 @@ def main():
                        ])),
         batch_size=args.test_batch_size, shuffle=False, **kwargs)
 
-    N_models_percent = 0.0001
+    N_models_percent = 0.001
     #N_models = 1000
     #models = []
     #for i in range(0,N_models):

@@ -169,6 +169,28 @@ def test(args, models, weights, device, test_loader):
         test_loss, correct, batch_idx,#len(test_loader.dataset),
         100. * correct / batch_idx))#len(test_loader.dataset)))
 
+def train_SGD(train_model, train_loader, optimizer, epoch):
+    print('\nEpoch: %d' % epoch)
+    net.train()
+    train_loss = 0
+    correct = 0
+    total = 0
+    for batch_idx, (inputs, targets) in enumerate(train_loader):
+        inputs, targets = inputs.to(device), targets.to(device)
+        optimizer.zero_grad()
+        outputs = train_model(inputs)
+        loss = criterion(outputs, targets)
+        loss.backward()
+        optimizer.step()
+
+        train_loss += loss.item()
+        _, predicted = outputs.max(1)
+        total += targets.size(0)
+        correct += predicted.eq(targets).sum().item()
+
+        progress_bar(batch_idx, len(train_loader), 'Loss: %.3f | Acc: %.3f%% (%d/%d)'
+            % (train_loss/(batch_idx+1), 100.*correct/total, correct, total))
+
 def main():
     # Training settings
     parser = argparse.ArgumentParser(description='PyTorch MNIST Example')
@@ -237,6 +259,10 @@ def main():
     #    models.append(Net().to(device))
     #optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum)
     train_model = NetCIFAR10().to(device)
+    
+    optimizer = optim.SGD(train_model.parameters(), lr=args.lr, momentum=args.momentum)
+    for epoch in range(1, 10):
+        train_SGD(train_model, train_loader, optimizer, epoch)
 
     seed_start_0 = np.random.randint(10000)
     seed_start = seed_start_0

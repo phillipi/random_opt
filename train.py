@@ -253,7 +253,7 @@ def main():
             batch_size=args.test_batch_size, shuffle=False, **kwargs)
 
     #N_models_percent = 0.001
-    N_models = 100
+    N_models = 1
     #models = []
     #for i in range(0,N_models):
     #    models.append(Net().to(device))
@@ -277,8 +277,8 @@ def main():
         losses = np.concatenate((losses, new_losses))
         seed_start += N
         
-        #ii = np.argsort(-accs)
-        ii = np.argsort(losses)
+        ii = np.argsort(-accs)
+        #ii = np.argsort(losses)
         
         #N_models = np.minimum(int(N_models_percent*len(losses)), 4000)
         

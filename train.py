@@ -253,17 +253,19 @@ def main():
             batch_size=args.test_batch_size, shuffle=False, **kwargs)
 
     #N_models_percent = 0.001
-    N_models = 100
+    N_models = 1
     #models = []
     #for i in range(0,N_models):
     #    models.append(Net().to(device))
     #optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum)
     train_model = NetCIFAR10().to(device)
-    
+
+    '''
     optimizer = optim.SGD(train_model.parameters(), lr=args.lr, momentum=args.momentum)
     for epoch in range(1, 10):
         train_SGD(train_model, train_loader, optimizer, device, epoch)
-
+    '''
+    
     seed_start_0 = np.random.randint(10000)
     seed_start = seed_start_0
     N = 100000

@@ -218,12 +218,13 @@ def main():
         
         ii = np.argsort(losses)
         
+        N_models = N_models_percent*len(losses)
+        
         losses_ = losses[ii[0:N_models]]
         weights = np.exp(-losses_*0.0)
         weights = weights/np.sum(weights)
         print('weights:',weights[1:100])
         
-        N_models = N_models_percent*len(losses)
         models = []
         for i in range(0,N_models):
             models.append(Net().to(device))

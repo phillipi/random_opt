@@ -292,7 +292,7 @@ def main():
             #print('top seed {}: {} (acc: {}%)'.format(i, ii[i], accs[ii[i]]))
             torch.manual_seed(ii[i]+seed_start_0)
             models[i].apply(weights_init)
-        test(args, models, weights, device, test_loader)
+        test(args, models, weights, device, train_loader)
     '''
     best_acc = 0.0
     best_seed = 0

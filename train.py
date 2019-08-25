@@ -217,7 +217,7 @@ def main():
         ii = np.argsort(losses)
         
         losses_ = losses[ii[0:N_models]]
-        weights = np.exp(-losses_*0.1)
+        weights = np.exp(-losses_*0.0)
         weights = weights/np.sum(weights)
         print('weights:',weights[1:100])
         

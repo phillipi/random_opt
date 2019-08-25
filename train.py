@@ -183,19 +183,36 @@ def main():
     device = torch.device("cuda" if use_cuda else "cpu")
 
     kwargs = {'num_workers': 1, 'pin_memory': True} if use_cuda else {}
-    train_loader = torch.utils.data.DataLoader(
-        datasets.MNIST('../data', train=True, download=True,
-                       transform=transforms.Compose([
-                           transforms.ToTensor(),
-                           transforms.Normalize((0.1307,), (0.3081,))
-                       ])),
-        batch_size=args.batch_size, shuffle=False, **kwargs)
-    test_loader = torch.utils.data.DataLoader(
-        datasets.MNIST('../data', train=False, transform=transforms.Compose([
-                           transforms.ToTensor(),
-                           transforms.Normalize((0.1307,), (0.3081,))
-                       ])),
-        batch_size=args.test_batch_size, shuffle=False, **kwargs)
+    
+    MNIST = False
+    if MNIST:
+        train_loader = torch.utils.data.DataLoader(
+            datasets.MNIST('../data', train=True, download=True,
+                           transform=transforms.Compose([
+                               transforms.ToTensor(),
+                               transforms.Normalize((0.1307,), (0.3081,))
+                           ])),
+            batch_size=args.batch_size, shuffle=False, **kwargs)
+        test_loader = torch.utils.data.DataLoader(
+            datasets.MNIST('../data', train=False, transform=transforms.Compose([
+                               transforms.ToTensor(),
+                               transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010))
+                           ])),
+            batch_size=args.test_batch_size, shuffle=False, **kwargs)
+    else:
+        train_loader = torch.utils.data.DataLoader(
+            datasets.CIFAR('../data', train=True, download=True,
+                           transform=transforms.Compose([
+                               transforms.ToTensor(),
+                               transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010))
+                           ])),
+            batch_size=args.batch_size, shuffle=False, **kwargs)
+        test_loader = torch.utils.data.DataLoader(
+            datasets.CIFAR('../data', train=False, transform=transforms.Compose([
+                               transforms.ToTensor(),
+                               transforms.Normalize((0.1307,), (0.3081,))
+                           ])),
+            batch_size=args.test_batch_size, shuffle=False, **kwargs)
 
     N_models_percent = 0.001
     #N_models = 1000

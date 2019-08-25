@@ -280,8 +280,8 @@ def main():
         losses = np.concatenate((losses, new_losses))
         seed_start += N
         
-        ii = np.argsort(-accs)
-        #ii = np.argsort(losses)
+        #ii = np.argsort(-accs)
+        ii = np.argsort(losses)
         
         #N_models = np.minimum(int(N_models_percent*len(losses)), 4000)
         

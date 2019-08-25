@@ -197,11 +197,11 @@ def main():
                        ])),
         batch_size=args.test_batch_size, shuffle=False, **kwargs)
 
-    #N_models = 1000
     N_models_percent = 0.0001
-    models = []
-    for i in range(0,N_models):
-        models.append(Net().to(device))
+    #N_models = 1000
+    #models = []
+    #for i in range(0,N_models):
+    #    models.append(Net().to(device))
     #optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum)
 
     seed_start_0 = np.random.randint(10000)
@@ -223,7 +223,9 @@ def main():
         print('weights:',weights[1:100])
         
         N_models = N_models_percent*len(losses)
+        models = []
         for i in range(0,N_models):
+            models.append(Net().to(device))
             #print('top seed {}: {} (acc: {}%)'.format(i, ii[i], accs[ii[i]]))
             torch.manual_seed(ii[i]+seed_start_0)
             models[i].apply(weights_init)

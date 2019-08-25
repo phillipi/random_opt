@@ -171,7 +171,7 @@ def test(args, models, weights, device, test_loader):
 
 def train_SGD(train_model, train_loader, optimizer, epoch):
     print('\nEpoch: %d' % epoch)
-    net.train()
+    train_model.train()
     train_loss = 0
     correct = 0
     total = 0

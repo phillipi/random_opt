@@ -230,8 +230,8 @@ def main():
                            ])),
             batch_size=args.test_batch_size, shuffle=False, **kwargs)
 
-    N_models_percent = 0.001
-    #N_models = 1000
+    #N_models_percent = 0.001
+    N_models = 1000
     #models = []
     #for i in range(0,N_models):
     #    models.append(Net().to(device))
@@ -251,7 +251,7 @@ def main():
         
         ii = np.argsort(losses)
         
-        N_models = np.minimum(int(N_models_percent*len(losses)), 4000)
+        #N_models = np.minimum(int(N_models_percent*len(losses)), 4000)
         
         losses_ = losses[ii[0:N_models]]
         weights = np.exp(-losses_*0.0)

@@ -106,8 +106,8 @@ def train(args, seed_start, N, model, device, train_loader, epoch):
         '''
         
         loss = F.nll_loss(output, target, reduction='sum').item() # sum up batch loss
-        #pred = output.argmax(dim=1, keepdim=True) # get the index of the max log-probability
-        #acc = pred.eq(target.view_as(pred)).sum().item()/pred.size(0)
+        pred = output.argmax(dim=1, keepdim=True) # get the index of the max log-probability
+        acc = pred.eq(target.view_as(pred)).sum().item()/pred.size(0)
         
         #accs[i] = acc
         losses[i] = loss
@@ -132,8 +132,8 @@ def train(args, seed_start, N, model, device, train_loader, epoch):
         '''
         
         if i % args.log_interval == 0:
-            #best_acc = np.max(accs)
-            #print('(iter {}) best acc: {:.0f}%'.format(i, 100*best_acc))
+            best_acc = np.max(accs)
+            print('(iter {}) best acc: {:.0f}%'.format(i, 100*best_acc))
             best_loss = np.min(losses)
             print('(iter {}) best loss: {}'.format(i, best_loss))
     
@@ -187,7 +187,7 @@ def main():
                         help='disables CUDA training')
     parser.add_argument('--seed', type=int, default=1, metavar='S',
                         help='random seed (default: 1)')
-    parser.add_argument('--log-interval', type=int, default=1000, metavar='N',
+    parser.add_argument('--log-interval', type=int, default=10000, metavar='N',
                         help='how many batches to wait before logging training status')
     
     parser.add_argument('--save-model', action='store_true', default=False,
@@ -257,7 +257,7 @@ def main():
         losses_ = losses[ii[0:N_models]]
         weights = np.exp(-losses_*0.0)
         weights = weights/np.sum(weights)
-        print('weights:',weights[1:100])
+        #print('weights:',weights[1:100])
         
         models = []
         for i in range(0,N_models):

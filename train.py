@@ -197,7 +197,8 @@ def main():
                        ])),
         batch_size=args.test_batch_size, shuffle=False, **kwargs)
 
-    N_models = 4000
+    #N_models = 1000
+    N_models_percent = 0.0001
     models = []
     for i in range(0,N_models):
         models.append(Net().to(device))
@@ -221,6 +222,7 @@ def main():
         weights = weights/np.sum(weights)
         print('weights:',weights[1:100])
         
+        N_models = N_models_percent*len(losses)
         for i in range(0,N_models):
             #print('top seed {}: {} (acc: {}%)'.format(i, ii[i], accs[ii[i]]))
             torch.manual_seed(ii[i]+seed_start_0)

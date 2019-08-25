@@ -67,12 +67,12 @@ def weights_init(m):
         #torch.nn.init.sparse_(m.weight.data, 0.9, std=0.01)
         
         torch.nn.init.normal_(m.weight.data, mean=0.0, std=1.0)
-        #mask = torch.abs(m.weight.data)<3.0 # 3.0 seems to be the best...
+        mask = torch.abs(m.weight.data)<3.0 # 3.0 seems to be the best...
         
         #torch.nn.init.uniform_(m.weight.data,-1.0,1.0)
         #mask = torch.abs(m.weight.data)<0.99
         
-        #m.weight.data[mask] = 0
+        m.weight.data[mask] = 0
         
         torch.nn.init.normal_(m.bias, mean=0.0, std=1.0)
         #torch.nn.init.constant_(m.bias, 0)
@@ -231,7 +231,7 @@ def main():
             batch_size=args.test_batch_size, shuffle=False, **kwargs)
 
     #N_models_percent = 0.001
-    N_models = 100
+    N_models = 10
     #models = []
     #for i in range(0,N_models):
     #    models.append(Net().to(device))

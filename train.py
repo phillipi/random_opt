@@ -203,6 +203,7 @@ def main():
     #for i in range(0,N_models):
     #    models.append(Net().to(device))
     #optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum)
+    train_model = Net().to(device)
 
     seed_start_0 = np.random.randint(10000)
     seed_start = seed_start_0
@@ -210,7 +211,7 @@ def main():
     accs = np.array([])
     losses = np.array([])
     for epoch in range(1, 100):#args.epochs + 1):
-        new_accs, new_losses = train(args, seed_start, N, models[0], device, train_loader, epoch)
+        new_accs, new_losses = train(args, seed_start, N, train_model, device, train_loader, epoch)
         accs = np.concatenate((accs, new_accs))
         losses = np.concatenate((losses, new_losses))
         seed_start += N

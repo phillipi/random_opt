@@ -169,7 +169,7 @@ def test(args, models, weights, device, test_loader):
         test_loss, correct, batch_idx,#len(test_loader.dataset),
         100. * correct / batch_idx))#len(test_loader.dataset)))
 
-def train_SGD(train_model, train_loader, optimizer, epoch):
+def train_SGD(train_model, train_loader, optimizer, device, epoch):
     print('\nEpoch: %d' % epoch)
     train_model.train()
     train_loss = 0
@@ -262,7 +262,7 @@ def main():
     
     optimizer = optim.SGD(train_model.parameters(), lr=args.lr, momentum=args.momentum)
     for epoch in range(1, 10):
-        train_SGD(train_model, train_loader, optimizer, epoch)
+        train_SGD(train_model, train_loader, optimizer, device, epoch)
 
     seed_start_0 = np.random.randint(10000)
     seed_start = seed_start_0

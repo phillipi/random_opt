@@ -157,7 +157,6 @@ def test(args, models, weights, device, test_loader):
                 else:
                     output += weights[model_idx]*model(data)
             
-            import pdb; pdb.set_trace()
             #test_loss += F.nll_loss(output, target, reduction='sum').item() # sum up batch loss
             pred = output.argmax(dim=1, keepdim=True) # get the index of the max log-probability
             correct += pred.eq(target.view_as(pred)).sum().item()/pred.size(0)

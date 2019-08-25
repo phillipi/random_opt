@@ -212,7 +212,7 @@ def main():
         test_loader = torch.utils.data.DataLoader(
             datasets.MNIST('../data', train=False, transform=transforms.Compose([
                                transforms.ToTensor(),
-                               transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010))
+                               transforms.Normalize((0.1307,), (0.3081,))
                            ])),
             batch_size=args.test_batch_size, shuffle=False, **kwargs)
     else:
@@ -226,12 +226,12 @@ def main():
         test_loader = torch.utils.data.DataLoader(
             datasets.CIFAR10('../data', train=False, transform=transforms.Compose([
                                transforms.ToTensor(),
-                               transforms.Normalize((0.1307,), (0.3081,))
+                               transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010))
                            ])),
             batch_size=args.test_batch_size, shuffle=False, **kwargs)
 
     #N_models_percent = 0.001
-    N_models = 10
+    N_models = 100
     #models = []
     #for i in range(0,N_models):
     #    models.append(Net().to(device))

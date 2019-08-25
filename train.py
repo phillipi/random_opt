@@ -211,7 +211,9 @@ def main():
                         help='random seed (default: 1)')
     parser.add_argument('--log-interval', type=int, default=2000, metavar='N',
                         help='how many batches to wait before logging training status')
-    
+    parser.add_argument('--dataset', type=str, default='MNIST',
+                        help='which dataset to use [MNIST, CIFAR10]')
+                        
     parser.add_argument('--save-model', action='store_true', default=False,
                         help='For Saving the current Model')
     args = parser.parse_args()
@@ -223,8 +225,8 @@ def main():
 
     kwargs = {'num_workers': 1, 'pin_memory': True} if use_cuda else {}
     
-    MNIST = False
-    if MNIST:
+    if args.dataset == 'MNIST':
+        Net = NetMNIST
         train_loader = torch.utils.data.DataLoader(
             datasets.MNIST('../data', train=True, download=True,
                            transform=transforms.Compose([
@@ -239,6 +241,7 @@ def main():
                            ])),
             batch_size=args.test_batch_size, shuffle=False, **kwargs)
     else:
+        Net = NetCIFAR10
         train_loader = torch.utils.data.DataLoader(
             datasets.CIFAR10('../data', train=True, download=True,
                            transform=transforms.Compose([
@@ -259,7 +262,7 @@ def main():
     #for i in range(0,N_models):
     #    models.append(Net().to(device))
     #optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum)
-    train_model = NetCIFAR10().to(device)
+    train_model = Net().to(device)
 
     '''
     optimizer = optim.SGD(train_model.parameters(), lr=args.lr, momentum=args.momentum)
@@ -293,7 +296,7 @@ def main():
         
         models = []
         for i in range(0,N_models):
-            models.append(NetCIFAR10().to(device))
+            models.append(Net().to(device))
             #print('top seed {}: {} (acc: {}%)'.format(i, ii[i], accs[ii[i]]))
             torch.manual_seed(ii[i]+seed_start_0)
             models[i].apply(weights_init)

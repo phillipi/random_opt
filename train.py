@@ -171,6 +171,7 @@ def test(args, models, weights, device, test_loader):
 
 def train_SGD(train_model, train_loader, optimizer, device, epoch):
     print('\nEpoch: %d' % epoch)
+    criterion = nn.CrossEntropyLoss()
     train_model.train()
     train_loss = 0
     correct = 0

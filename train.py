@@ -34,7 +34,7 @@ class NetMNIST(nn.Module):
 class NetCIFAR10(nn.Module):
     def __init__(self):
         super(NetCIFAR10, self).__init__()
-        self.conv1 = nn.Conv2d(1, 20, 5, 1)
+        self.conv1 = nn.Conv2d(3, 20, 5, 1)
         self.conv2 = nn.Conv2d(20, 50, 5, 1)
         self.fc1 = nn.Linear(5*5*50, 500)
         self.fc2 = nn.Linear(500, 10)

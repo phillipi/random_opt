@@ -66,8 +66,8 @@ def weights_init(m):
         #torch.nn.init.kaiming_uniform_(m.weight.data)
         #torch.nn.init.sparse_(m.weight.data, 0.9, std=0.01)
         
-        torch.nn.init.normal_(m.weight.data, mean=0.0, std=1.0)
-        mask = torch.abs(m.weight.data)<3.0 # 3.0 seems to be the best...
+        torch.nn.init.normal_(m.weight.data, mean=0.0, std=0.01)
+        mask = torch.abs(m.weight.data)<0.03 # 3.0 seems to be the best...
         
         #torch.nn.init.uniform_(m.weight.data,-1.0,1.0)
         #mask = torch.abs(m.weight.data)<0.99
@@ -157,6 +157,7 @@ def test(args, models, weights, device, test_loader):
                 else:
                     output += weights[model_idx]*model(data)
             
+            import pdb; pdb.set_trace()
             #test_loss += F.nll_loss(output, target, reduction='sum').item() # sum up batch loss
             pred = output.argmax(dim=1, keepdim=True) # get the index of the max log-probability
             correct += pred.eq(target.view_as(pred)).sum().item()/pred.size(0)

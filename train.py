@@ -109,7 +109,7 @@ def train(args, seed_start, N, model, device, train_loader, epoch):
         for j in range(0,M):
             optimizer.zero_grad()
             output = model(data)
-            loss = F.nll_loss(output, target, reduction='sum')
+            loss = -F.nll_loss(output, target, reduction='sum')
             loss.backward()
             optimizer.step()
         

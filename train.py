@@ -94,9 +94,9 @@ def train(args, seed_start, N, model, device, train_loader, epoch):
     for i in range(0,N):
         
         # rand init
-        seed = i+seed_start
-        torch.manual_seed(seed)
-        model.apply(weights_init)
+        #seed = i+seed_start
+        #torch.manual_seed(seed)
+        #model.apply(weights_init)
 
         # linear layer on top
         '''

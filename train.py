@@ -78,7 +78,7 @@ def weights_init(m):
         torch.nn.init.normal_(m.bias, mean=0.0, std=1.0)
         #torch.nn.init.constant_(m.bias, 0)
 
-def train(args, seed_start, N, model, device, train_loader, epoch):
+def train(args, seed_start, N, model, device, train_loader, args, epoch):
     
     model.train()
     
@@ -95,9 +95,6 @@ def train(args, seed_start, N, model, device, train_loader, epoch):
         seed = i+seed_start
         torch.manual_seed(seed)
         model.apply(weights_init)
-        
-        # eval model
-        output = model(data)
 
         # linear layer on top
         '''
@@ -107,6 +104,19 @@ def train(args, seed_start, N, model, device, train_loader, epoch):
         '''
         
         loss = F.nll_loss(output, target, reduction='sum').item() # sum up batch loss
+        
+        # SGD for M steps
+        M = 1
+        optimizer = optim.SGD(train_model.parameters(), lr=args.lr, momentum=args.momentum)
+        for j in range(0,M):
+            optimizer.zero_grad()
+            output = model(data)
+            loss = criterion(output, target)
+            loss.backward()
+            optimizer.step()
+        
+        # eval model
+        output = model(data)
         pred = output.argmax(dim=1, keepdim=True) # get the index of the max log-probability
         acc = pred.eq(target.view_as(pred)).sum().item()/pred.size(0)
         accs[i] = acc
@@ -276,7 +286,7 @@ def main():
     accs = np.array([])
     losses = np.array([])
     for epoch in range(1, 100):#args.epochs + 1):
-        new_accs, new_losses = train(args, seed_start, N, train_model, device, train_loader, epoch)
+        new_accs, new_losses = train(args, seed_start, N, train_model, device, train_loader, args, epoch)
         accs = np.concatenate((accs, new_accs))
         losses = np.concatenate((losses, new_losses))
         seed_start += N

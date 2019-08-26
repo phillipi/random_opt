@@ -51,6 +51,8 @@ class NetCIFAR10(nn.Module):
         return F.log_softmax(x, dim=1)
         
 def weights_init(m):
+    m.reset_parameters()
+    '''
     if isinstance(m, nn.Conv2d):
         #torch.nn.init.uniform_(m.weight.data,-1.0,1.0)
         #torch.nn.init.xavier_uniform(m.weight.data)
@@ -77,6 +79,7 @@ def weights_init(m):
         
         torch.nn.init.normal_(m.bias, mean=0.0, std=1.0)
         #torch.nn.init.constant_(m.bias, 0)
+    '''
 
 def train(args, seed_start, N, model, device, train_loader, epoch):
     
@@ -94,9 +97,9 @@ def train(args, seed_start, N, model, device, train_loader, epoch):
     for i in range(0,N):
         
         # rand init
-        #seed = i+seed_start
-        #torch.manual_seed(seed)
-        #model.apply(weights_init)
+        seed = i+seed_start
+        torch.manual_seed(seed)
+        model.apply(weights_init)
 
         # linear layer on top
         '''

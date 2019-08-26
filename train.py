@@ -103,20 +103,19 @@ def train(args, seed_start, N, model, device, train_loader, epoch):
         output = torch.mm(W, output)
         '''
         
-        loss = F.nll_loss(output, target, reduction='sum').item() # sum up batch loss
-        
         # SGD for M steps
         M = 1
         optimizer = optim.SGD(train_model.parameters(), lr=args.lr, momentum=args.momentum)
         for j in range(0,M):
             optimizer.zero_grad()
             output = model(data)
-            loss = criterion(output, target)
+            loss = F.nll_loss(output, target, reduction='mean')
             loss.backward()
             optimizer.step()
         
         # eval model
         output = model(data)
+        loss = F.nll_loss(output, target, reduction='sum').item() # sum up batch loss
         pred = output.argmax(dim=1, keepdim=True) # get the index of the max log-probability
         acc = pred.eq(target.view_as(pred)).sum().item()/pred.size(0)
         accs[i] = acc

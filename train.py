@@ -196,7 +196,7 @@ def train_SGD(train_model, train_loader, optimizer, device, epoch):
     total = 0
     for batch_idx, (inputs, targets) in enumerate(train_loader):
         inputs, targets = inputs.to(device), targets.to(device)
-    for i in range(0,10000)
+    for i in range(0,10000):
         optimizer.zero_grad()
         outputs = train_model(inputs)
         loss = criterion(outputs, targets)

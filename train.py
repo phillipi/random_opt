@@ -8,6 +8,7 @@ import torch.nn.functional as F
 import torch.optim as optim
 from torchvision import datasets, transforms
 import numpy as np
+import time
 
 class NetMNIST(nn.Module):
     def __init__(self):
@@ -269,9 +270,9 @@ def main():
         train_SGD(train_model, train_loader, optimizer, device, epoch)
     '''
     
-    seed_start_0 = np.random.randint(10000)
+    seed_start_0 = np.random.randint(time.time())
     seed_start = seed_start_0
-    N = 2000
+    N = 10000
     accs = np.array([])
     losses = np.array([])
     for epoch in range(1, 100):#args.epochs + 1):

@@ -67,7 +67,7 @@ def weights_init(m):
         #torch.nn.init.sparse_(m.weight.data, 0.9, std=0.01)
         
         torch.nn.init.normal_(m.weight.data, mean=0.0, std=1.0)
-        mask = torch.abs(m.weight.data)<4.0 # 3.0 seems to be the best...
+        mask = torch.abs(m.weight.data)<3.0 # 3.0 seems to be the best...
         
         #torch.nn.init.uniform_(m.weight.data,-1.0,1.0)
         #mask = torch.abs(m.weight.data)<0.99
@@ -296,7 +296,7 @@ def main():
         models = []
         for i in range(0,N_models):
             models.append(Net().to(device))
-            #print('top seed {}: {} (acc: {}%)'.format(i, ii[i], accs[ii[i]]))
+            print('top seed {}: {} (acc: {}%)'.format(i, ii[i], accs[ii[i]]))
             torch.manual_seed(ii[i]+seed_start_0)
             models[i].apply(weights_init)
         test(args, models, weights, device, test_loader)

@@ -287,11 +287,11 @@ def main():
     #optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum)
     train_model = Net().to(device)
 
-    
+    '''
     optimizer = optim.SGD(train_model.parameters(), lr=args.lr, momentum=args.momentum)
     for epoch in range(1, 10):
         train_SGD(train_model, train_loader, optimizer, device, epoch)
-    
+    '''
     
     seed_start_0 = np.random.randint(time.time())
     seed_start = seed_start_0

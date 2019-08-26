@@ -82,6 +82,8 @@ def train(args, seed_start, N, model, device, train_loader, epoch):
     
     model.train()
     
+    criterion = nn.CrossEntropyLoss()
+    
     # load data
     for batch_idx, (data, target) in enumerate(train_loader):
         data, target = data.to(device), target.to(device)
@@ -109,7 +111,8 @@ def train(args, seed_start, N, model, device, train_loader, epoch):
         for j in range(0,M):
             optimizer.zero_grad()
             output = model(data)
-            loss = -F.nll_loss(output, target, reduction='sum')
+            #loss = F.nll_loss(output, target, reduction='sum')
+            loss = criterion(output, target)
             loss.backward()
             optimizer.step()
         

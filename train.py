@@ -78,7 +78,7 @@ def weights_init(m):
         torch.nn.init.normal_(m.bias, mean=0.0, std=1.0)
         #torch.nn.init.constant_(m.bias, 0)
 
-def train(args, seed_start, N, model, device, train_loader, args, epoch):
+def train(args, seed_start, N, model, device, train_loader, epoch):
     
     model.train()
     
@@ -286,7 +286,7 @@ def main():
     accs = np.array([])
     losses = np.array([])
     for epoch in range(1, 100):#args.epochs + 1):
-        new_accs, new_losses = train(args, seed_start, N, train_model, device, train_loader, args, epoch)
+        new_accs, new_losses = train(args, seed_start, N, train_model, device, train_loader, epoch)
         accs = np.concatenate((accs, new_accs))
         losses = np.concatenate((losses, new_losses))
         seed_start += N

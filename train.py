@@ -113,7 +113,10 @@ def train(args, seed_start, N, model, device, train_loader, epoch):
             output = model(data)
             #loss = F.nll_loss(output, target, reduction='sum')
             loss = criterion(output, target)
+            pred = output.argmax(dim=1, keepdim=True) # get the index of the max log-probability
+            acc = pred.eq(target.view_as(pred)).sum().item()/pred.size(0)
             #print('loss:', loss)
+            print('acc:', acc)
             loss.backward()
             optimizer.step()
         

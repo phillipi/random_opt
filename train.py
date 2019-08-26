@@ -194,9 +194,9 @@ def test(args, models, weights, device, test_loader, train_loader):
             optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum)
             for j in range(0,args.M):
                 optimizer.zero_grad()
-                output = model(data_train)
+                output_train = model(data_train)
                 #loss = F.nll_loss(output, target, reduction='sum')
-                loss = criterion(output, target_train)
+                loss = criterion(output_train, target_train)
                 loss.backward()
                 optimizer.step()
             

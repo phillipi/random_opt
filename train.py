@@ -109,10 +109,13 @@ def train(args, seed_start, N, model, device, train_loader, epoch):
         M = 100
         optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum)
         for j in range(0,M):
+            
             optimizer.zero_grad()
             output = model(data)
             #loss = F.nll_loss(output, target, reduction='sum')
             loss = criterion(output, target)
+            loss.backward()
+            optimizer.step()
             
             #pred = output.argmax(dim=1, keepdim=True) # get the index of the max log-probability
             #acc = pred.eq(target.view_as(pred)).sum().item()/pred.size(0)
@@ -123,8 +126,7 @@ def train(args, seed_start, N, model, device, train_loader, epoch):
             correct = predicted.eq(target).sum().item()
             
             print('Loss: {:.3f} | Acc: {:.3f}% ({}/{})'.format(train_loss, 100.*correct/total, correct, total))
-            loss.backward()
-            optimizer.step()
+            
         
         # eval model
         output = model(data)

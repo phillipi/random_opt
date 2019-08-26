@@ -105,7 +105,7 @@ def train(args, seed_start, N, model, device, train_loader, epoch):
         
         # SGD for M steps
         M = 1
-        optimizer = optim.SGD(train_model.parameters(), lr=args.lr, momentum=args.momentum)
+        optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum)
         for j in range(0,M):
             optimizer.zero_grad()
             output = model(data)

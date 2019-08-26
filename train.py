@@ -175,6 +175,8 @@ def test(args, models, weights, device, test_loader):
     for model in models:
         model.eval()
     
+    criterion = nn.CrossEntropyLoss()
+    
     test_loss = 0
     correct = 0
     with torch.no_grad():

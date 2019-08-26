@@ -170,42 +170,46 @@ def train(args, seed_start, N, model, device, train_loader, epoch):
     #return best_seed, best_acc
     return accs, losses
 
-def test(args, models, weights, device, test_loader):
+def test(args, models, weights, device, test_loader, train_loader):
     
     for model in models:
         model.eval()
     
     criterion = nn.CrossEntropyLoss()
     
+    for batch_idx, (data, target) in enumerate(train_loader):
+        data_train, target_train = data.to(device), target.to(device)
+        break # just load one batch
+    
     test_loss = 0
     correct = 0
-    with torch.no_grad():
-        for batch_idx, (data, target) in enumerate(test_loader):
-            data, target = data.to(device), target.to(device)
+    #with torch.no_grad():
+    for batch_idx, (data, target) in enumerate(test_loader):
+        data, target = data.to(device), target.to(device)
+        
+        output = None
+        for model_idx, model in enumerate(models):
             
-            output = None
-            for model_idx, model in enumerate(models):
-                
-                # SGD for M steps
-                optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum)
-                for j in range(0,args.M):
-                    optimizer.zero_grad()
-                    output = model(data)
-                    #loss = F.nll_loss(output, target, reduction='sum')
-                    loss = criterion(output, target)
-                    loss.backward()
-                    optimizer.step()
-                
-                if output is None:
-                    output = weights[model_idx]*model(data)
-                else:
-                    output += weights[model_idx]*model(data)
+            # SGD for M steps
+            optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum)
+            for j in range(0,args.M):
+                optimizer.zero_grad()
+                output = model(data_train)
+                #loss = F.nll_loss(output, target, reduction='sum')
+                loss = criterion(output, target_train)
+                loss.backward()
+                optimizer.step()
             
-            #test_loss += F.nll_loss(output, target, reduction='sum').item() # sum up batch loss
-            pred = output.argmax(dim=1, keepdim=True) # get the index of the max log-probability
-            correct += pred.eq(target.view_as(pred)).sum().item()/pred.size(0)
-            #if batch_idx>10:
-            #    break
+            if output is None:
+                output = weights[model_idx]*model(data)
+            else:
+                output += weights[model_idx]*model(data)
+        
+        #test_loss += F.nll_loss(output, target, reduction='sum').item() # sum up batch loss
+        pred = output.argmax(dim=1, keepdim=True) # get the index of the max log-probability
+        correct += pred.eq(target.view_as(pred)).sum().item()/pred.size(0)
+        #if batch_idx>10:
+        #    break
 
     test_loss /= batch_idx#len(test_loader.dataset)
 
@@ -345,7 +349,7 @@ def main():
             print('top seed {}: {} (loss: {}, acc: {}%)'.format(i, ii[i], losses[ii[i]], accs[ii[i]]))
             torch.manual_seed(ii[i]+seed_start_0)
             models[i].apply(weights_init)
-        test(args, models, weights, device, test_loader)
+        test(args, models, weights, device, test_loader, train_loader)
     '''
     best_acc = 0.0
     best_seed = 0

@@ -181,6 +181,17 @@ def test(args, models, weights, device, test_loader, train_loader):
         data_train, target_train = data.to(device), target.to(device)
         break # just load one batch
     
+    # SGD for M steps
+    for model_idx, model in enumerate(models):
+        optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum)
+        for j in range(0,args.M):
+            optimizer.zero_grad()
+            output_train = model(data_train)
+            #loss = F.nll_loss(output, target, reduction='sum')
+            loss = criterion(output_train, target_train)
+            loss.backward()
+            optimizer.step()
+    
     test_loss = 0
     correct = 0
     #with torch.no_grad():
@@ -189,17 +200,6 @@ def test(args, models, weights, device, test_loader, train_loader):
         
         output = None
         for model_idx, model in enumerate(models):
-            
-            # SGD for M steps
-            optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum)
-            for j in range(0,args.M):
-                optimizer.zero_grad()
-                output_train = model(data_train)
-                #loss = F.nll_loss(output, target, reduction='sum')
-                loss = criterion(output_train, target_train)
-                loss.backward()
-                optimizer.step()
-            
             if output is None:
                 output = weights[model_idx]*model(data)
             else:

@@ -110,9 +110,8 @@ def train(args, seed_start, N, model, device, train_loader, epoch):
         '''
         
         # SGD for M steps
-        M = 5
         optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum)
-        for j in range(0,M):
+        for j in range(0,args.M):
             
             optimizer.zero_grad()
             output = model(data)
@@ -184,6 +183,17 @@ def test(args, models, weights, device, test_loader):
             
             output = None
             for model_idx, model in enumerate(models):
+                
+                # SGD for M steps
+                optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum)
+                for j in range(0,args.M):
+                    optimizer.zero_grad()
+                    output = model(data)
+                    #loss = F.nll_loss(output, target, reduction='sum')
+                    loss = criterion(output, target)
+                    loss.backward()
+                    optimizer.step()
+                
                 if output is None:
                     output = weights[model_idx]*model(data)
                 else:
@@ -244,6 +254,8 @@ def main():
                         help='how many batches to wait before logging training status')
     parser.add_argument('--dataset', type=str, default='MNIST',
                         help='which dataset to use [MNIST, CIFAR10]')
+    parser.add_argument('--M', type=int, default=0,
+                        help='M steps of SGD post init')
                         
     parser.add_argument('--save-model', action='store_true', default=False,
                         help='For Saving the current Model')

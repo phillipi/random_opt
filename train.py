@@ -336,8 +336,8 @@ def main():
         losses = np.concatenate((losses, new_losses))
         seed_start += N
         
-        #ii = np.argsort(-accs)
-        ii = np.argsort(losses)
+        ii = np.argsort(-accs)
+        #ii = np.argsort(losses)
         
         #N_models = np.minimum(int(N_models_percent*len(losses)), 4000)
         
@@ -352,7 +352,7 @@ def main():
         models = []
         for i in range(0,N_models):
             models.append(Net().to(device))
-            print('top seed {}: {} (loss: {}, acc: {}%)'.format(i, ii[i], losses[ii[i]], accs[ii[i]]))
+            print('top seed {}: {} (loss: {}, acc: {}%)'.format(i, ii[i]+seed_start_0, losses[ii[i]], accs[ii[i]]))
             torch.manual_seed(ii[i]+seed_start_0)
             models[i].apply(weights_init)
         test(args, models, weights, device, test_loader, train_loader)

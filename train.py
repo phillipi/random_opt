@@ -202,7 +202,7 @@ def test(args, models, weights, device, test_loader, train_loader):
     for batch_idx, (data, target) in enumerate(test_loader):
         data, target = data.to(device), target.to(device)
         
-        ensemble_by_averaging = True
+        ensemble_by_averaging = False
         if ensemble_by_averaging:
             output = None
             for model_idx, model in enumerate(models):
@@ -325,7 +325,7 @@ def main():
             batch_size=args.test_batch_size, shuffle=False, **kwargs)
 
     #N_models_percent = 0.001
-    N_models = 25
+    N_models = 100
     #models = []
     #for i in range(0,N_models):
     #    models.append(Net().to(device))
@@ -340,7 +340,7 @@ def main():
     
     seed_start_0 = np.random.randint(time.time())
     seed_start = seed_start_0
-    N = 2000
+    N = 10000
     accs = np.array([])
     losses = np.array([])
     for epoch in range(1, 100):#args.epochs + 1):

@@ -15,17 +15,13 @@ class NetMNIST(nn.Module):
         super(NetMNIST, self).__init__()
         self.conv1 = nn.Conv2d(1, 20, 4, 2) # 28x28 --> 13x13
         self.conv2 = nn.Conv2d(20, 20, 3, 2) # 13x13 --> 6x6
-        self.conv3 = nn.Conv2d(20, 20, 4, 4) # 6x6 --> 2x2
+        self.conv3 = nn.Conv2d(20, 20, 4, 2) # 6x6 --> 2x2
         self.fc1 = nn.Linear(2*2*20, 10)
 
     def forward(self, x):
-        print(x.shape)
         x = F.relu(self.conv1(x))
-        print(x.shape)
         x = F.relu(self.conv2(x))
-        print(x.shape)
         x = F.relu(self.conv3(x))
-        print(x.shape)
         x = x.view(-1, 2*2*20)
         x = self.fc1(x)
         return F.log_softmax(x, dim=1)

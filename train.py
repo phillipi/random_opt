@@ -262,6 +262,8 @@ def main():
                         help='which dataset to use [MNIST, CIFAR10]')
     parser.add_argument('--M', type=int, default=0,
                         help='M steps of SGD post init')
+    parser.add_argument('--log_interval', type=int, default=1,
+                        help='how often to output logs')
                         
     parser.add_argument('--save-model', action='store_true', default=False,
                         help='For Saving the current Model')

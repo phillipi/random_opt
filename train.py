@@ -224,7 +224,6 @@ def test(args, models, weights, device, test_loader, train_loader):
             if preds is None:
                 preds = output*0.0
             preds += torch.nn.functional.one_hot(output.argmax(dim=1, keepdim=False), num_classes=preds.shape[1]).float()  # a single vote
-        print(preds)
         pred = preds.argmax(dim=1, keepdim=True) # majority vote
         correct += pred.eq(target.view_as(pred)).sum().item()/pred.size(0)
 

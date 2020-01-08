@@ -198,6 +198,7 @@ def test(args, models, weights, device, test_loader, train_loader):
     
     test_loss = 0
     correct = 0
+    total = 0
     #with torch.no_grad():
     for batch_idx, (data, target) in enumerate(test_loader):
         data, target = data.to(device), target.to(device)
@@ -213,7 +214,8 @@ def test(args, models, weights, device, test_loader, train_loader):
             
             #test_loss += F.nll_loss(output, target, reduction='sum').item() # sum up batch loss
             pred = output.argmax(dim=1, keepdim=True) # get the index of the max log-probability
-            correct += pred.eq(target.view_as(pred)).sum().item()/pred.size(0)
+            correct += pred.eq(target.view_as(pred)).sum().item()#/pred.size(0)
+            total += pred.size(0)
             #if batch_idx>10:
             #    break
         
@@ -226,13 +228,14 @@ def test(args, models, weights, device, test_loader, train_loader):
                     preds = output*0.0
                 preds += torch.nn.functional.one_hot(output.argmax(dim=1, keepdim=False), num_classes=preds.shape[1]).float()  # a single vote
             pred = preds.argmax(dim=1, keepdim=True) # majority vote
-            correct += pred.eq(target.view_as(pred)).sum().item()/pred.size(0)
-
-    test_loss /= batch_idx#len(test_loader.dataset)
+            correct += pred.eq(target.view_as(pred)).sum().item()#/pred.size(0)
+            total += pred.size(0)
+            
+    test_loss /= total#len(test_loader.dataset)
 
     print('\nTest set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
-        test_loss, correct, batch_idx,#len(test_loader.dataset),
-        100. * correct / batch_idx))#len(test_loader.dataset)))
+        test_loss, correct, total,#len(test_loader.dataset),
+        100. * correct / total))#len(test_loader.dataset)))
 
 def train_SGD(train_model, train_loader, optimizer, device, epoch):
     print('\nEpoch: %d' % epoch)

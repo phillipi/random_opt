@@ -62,8 +62,8 @@ def weights_init(m):
         #mask = torch.abs(m.weight.data)<2.0
         #m.weight.data[mask] = 0
         
-        torch.nn.init.normal_(m.bias, mean=0.0, std=1.0)
-        #torch.nn.init.constant_(m.bias, 0)
+        #torch.nn.init.normal_(m.bias, mean=0.0, std=1.0)
+        torch.nn.init.constant_(m.bias, 0)
     elif isinstance(m, nn.Linear):
         #m.reset_parameters()
         
@@ -79,8 +79,8 @@ def weights_init(m):
         
         #m.weight.data[mask] = 0
         
-        torch.nn.init.normal_(m.bias, mean=0.0, std=1.0)
-        #torch.nn.init.constant_(m.bias, 0)
+        #torch.nn.init.normal_(m.bias, mean=0.0, std=1.0)
+        torch.nn.init.constant_(m.bias, 0)
 
 def train(args, seed_start, N, model, device, train_loader, epoch):
     

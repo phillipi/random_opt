@@ -344,7 +344,7 @@ def main():
             batch_size=args.test_batch_size, shuffle=False, **kwargs)
 
     #N_models_percent = 0.001
-    N_models = 25
+    N_models = 250
     #models = []
     #for i in range(0,N_models):
     #    models.append(Net().to(device))

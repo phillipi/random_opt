@@ -19,8 +19,11 @@ class NetMNIST(nn.Module):
         self.fc1 = nn.Linear(2*2*20, 10)
 
     def forward(self, x):
+        print(x.shape)
         x = F.relu(self.conv1(x))
+        print(x.shape)
         x = F.relu(self.conv2(x))
+        print(x.shape)
         x = F.relu(self.conv3(x))
         print(x.shape)
         x = x.view(-1, 2*2*20)

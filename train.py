@@ -219,7 +219,7 @@ def test(args, models, weights, device, test_loader, train_loader):
     for batch_idx, (data, target) in enumerate(test_loader):
         data, target = data.to(device), target.to(device)
         
-        ensemble_by_averaging = True
+        ensemble_by_averaging = False
         if ensemble_by_averaging:
             output = None
             for model_idx, model in enumerate(models):
@@ -368,8 +368,8 @@ def main():
         losses = np.concatenate((losses, new_losses))
         seed_start += N
         
-        #ii = np.argsort(-accs)
-        ii = np.argsort(losses)
+        ii = np.argsort(-accs)
+        #ii = np.argsort(losses)
         
         #N_models = np.minimum(int(N_models_percent*len(losses)), 4000)
         

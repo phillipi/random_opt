@@ -202,6 +202,7 @@ def test(args, models, weights, device, test_loader, train_loader):
     for batch_idx, (data, target) in enumerate(test_loader):
         data, target = data.to(device), target.to(device)
         
+        '''
         output = None
         for model_idx, model in enumerate(models):
             if output is None:
@@ -214,6 +215,18 @@ def test(args, models, weights, device, test_loader, train_loader):
         correct += pred.eq(target.view_as(pred)).sum().item()/pred.size(0)
         #if batch_idx>10:
         #    break
+        '''
+        
+        # ensemble by voting
+        N_classes = 10
+        preds = None
+        for model_idx, model in enumerate(models):
+            output = model(data)
+            if preds is None:
+                preds = output*0.0
+            preds[output.argmax(dim=1, keepdim=True)] += 1 # a single vote
+        pred = preds.argmax(dim=1, keepdim=True) # majority vote
+        correct += pred.eq(target.view_as(pred)).sum().item()/pred.size(0)
 
     test_loss /= batch_idx#len(test_loader.dataset)
 
@@ -312,7 +325,7 @@ def main():
             batch_size=args.test_batch_size, shuffle=False, **kwargs)
 
     #N_models_percent = 0.001
-    N_models = 1
+    N_models = 10
     #models = []
     #for i in range(0,N_models):
     #    models.append(Net().to(device))

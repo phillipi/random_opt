@@ -13,6 +13,21 @@ import time
 class NetMNIST(nn.Module):
     def __init__(self):
         super(NetMNIST, self).__init__()
+        self.conv1 = nn.Conv2d(1, 20, 4, 2) # 28x28 --> 13x13
+        self.conv2 = nn.Conv2d(20, 20, 3, 2) # 13x13 --> 6x6
+        self.conv3 = nn.Conv2d(20, 20, 4, 4) # 6x6 --> 2x2
+        self.fc1 = nn.Linear(2*2*20, 10)
+
+    def forward(self, x):
+        x = F.relu(self.conv1(x))
+        x = F.relu(self.conv2(x))
+        x = F.relu(self.conv3(x))
+        x = x.view(-1, 2*2*20)
+        x = self.fc1(x)
+        return F.log_softmax(x, dim=1)
+    '''
+    def __init__(self):
+        super(NetMNIST, self).__init__()
         self.conv1 = nn.Conv2d(1, 20, 5, 1)
         #self.conv2 = nn.Conv2d(20, 10, 5, 1)
         self.conv2 = nn.Conv2d(20, 50, 5, 1)
@@ -31,6 +46,7 @@ class NetMNIST(nn.Module):
         x = self.fc2(x)
         #x = self.fc1(x)
         return F.log_softmax(x, dim=1)
+    '''
 
 class NetCIFAR10(nn.Module):
     def __init__(self):

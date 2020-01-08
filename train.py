@@ -203,7 +203,7 @@ def test(args, models, weights, device, test_loader, train_loader):
     for batch_idx, (data, target) in enumerate(test_loader):
         data, target = data.to(device), target.to(device)
         
-        ensemble_by_averaging = False
+        ensemble_by_averaging = True
         if ensemble_by_averaging:
             output = None
             for model_idx, model in enumerate(models):

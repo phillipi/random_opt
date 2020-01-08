@@ -323,7 +323,7 @@ def main():
     
     seed_start_0 = np.random.randint(time.time())
     seed_start = seed_start_0
-    N = 1000
+    N = 2000
     accs = np.array([])
     losses = np.array([])
     for epoch in range(1, 100):#args.epochs + 1):

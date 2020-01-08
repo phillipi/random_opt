@@ -173,7 +173,7 @@ def train(args, seed_start, N, model, device, train_loader, epoch):
 def test(args, models, weights, device, test_loader, train_loader):
     
     for model in models:
-        model.eval()
+        model.train()#eval()
     
     criterion = nn.CrossEntropyLoss()
     

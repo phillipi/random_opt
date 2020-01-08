@@ -65,7 +65,7 @@ def weights_init(m):
         torch.nn.init.normal_(m.bias, mean=0.0, std=1.0)
         #torch.nn.init.constant_(m.bias, 0)
     elif isinstance(m, nn.Linear):
-        m.reset_parameters()
+        #m.reset_parameters()
         
         #torch.nn.init.xavier_uniform(m.weight.data)
         #torch.nn.init.kaiming_uniform_(m.weight.data)

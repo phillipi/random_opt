@@ -202,30 +202,31 @@ def test(args, models, weights, device, test_loader, train_loader):
     for batch_idx, (data, target) in enumerate(test_loader):
         data, target = data.to(device), target.to(device)
         
-        '''
-        output = None
-        for model_idx, model in enumerate(models):
-            if output is None:
-                output = weights[model_idx]*model(data)
-            else:
-                output += weights[model_idx]*model(data)
+        ensemble_by_averaging = True
+        if ensemble_by_averaging:
+            output = None
+            for model_idx, model in enumerate(models):
+                if output is None:
+                    output = weights[model_idx]*model(data)
+                else:
+                    output += weights[model_idx]*model(data)
+            
+            #test_loss += F.nll_loss(output, target, reduction='sum').item() # sum up batch loss
+            pred = output.argmax(dim=1, keepdim=True) # get the index of the max log-probability
+            correct += pred.eq(target.view_as(pred)).sum().item()/pred.size(0)
+            #if batch_idx>10:
+            #    break
         
-        #test_loss += F.nll_loss(output, target, reduction='sum').item() # sum up batch loss
-        pred = output.argmax(dim=1, keepdim=True) # get the index of the max log-probability
-        correct += pred.eq(target.view_as(pred)).sum().item()/pred.size(0)
-        #if batch_idx>10:
-        #    break
-        '''
-        
-        # ensemble by voting
-        preds = None
-        for model_idx, model in enumerate(models):
-            output = model(data)
-            if preds is None:
-                preds = output*0.0
-            preds += torch.nn.functional.one_hot(output.argmax(dim=1, keepdim=False), num_classes=preds.shape[1]).float()  # a single vote
-        pred = preds.argmax(dim=1, keepdim=True) # majority vote
-        correct += pred.eq(target.view_as(pred)).sum().item()/pred.size(0)
+        else:
+            # ensemble by voting
+            preds = None
+            for model_idx, model in enumerate(models):
+                output = model(data)
+                if preds is None:
+                    preds = output*0.0
+                preds += torch.nn.functional.one_hot(output.argmax(dim=1, keepdim=False), num_classes=preds.shape[1]).float()  # a single vote
+            pred = preds.argmax(dim=1, keepdim=True) # majority vote
+            correct += pred.eq(target.view_as(pred)).sum().item()/pred.size(0)
 
     test_loss /= batch_idx#len(test_loader.dataset)
 

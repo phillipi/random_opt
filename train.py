@@ -52,7 +52,8 @@ class NetCIFAR10(nn.Module):
         
 def weights_init(m):
     if isinstance(m, nn.Conv2d):
-        m.reset_parameters()
+        pass
+        #m.reset_parameters()
         
         #torch.nn.init.uniform_(m.weight.data,-1.0,1.0)
         #torch.nn.init.xavier_uniform(m.weight.data)

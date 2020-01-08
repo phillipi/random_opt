@@ -57,8 +57,8 @@ def weights_init(m):
         #torch.nn.init.uniform_(m.weight.data,-1.0,1.0)
         #torch.nn.init.xavier_uniform(m.weight.data)
         #torch.nn.init.kaiming_uniform_(m.weight.data)
-        torch.nn.init.sparse_(m.weight.data, 0.9, std=0.01)
-        #torch.nn.init.normal_(m.weight.data, mean=0.0, std=1.0)
+        #torch.nn.init.sparse_(m.weight.data, 0.9, std=0.01)
+        torch.nn.init.normal_(m.weight.data, mean=0.0, std=1.0)
         #mask = torch.abs(m.weight.data)<2.0
         #m.weight.data[mask] = 0
         
@@ -69,9 +69,9 @@ def weights_init(m):
         
         #torch.nn.init.xavier_uniform(m.weight.data)
         #torch.nn.init.kaiming_uniform_(m.weight.data)
-        torch.nn.init.sparse_(m.weight.data, 0.9, std=0.01)
+        #torch.nn.init.sparse_(m.weight.data, 0.9, std=0.01)
         
-        #torch.nn.init.normal_(m.weight.data, mean=0.0, std=1.0)
+        torch.nn.init.normal_(m.weight.data, mean=0.0, std=1.0)
         #mask = torch.abs(m.weight.data)<3.0 # 3.0 seems to be the best...
         
         #torch.nn.init.uniform_(m.weight.data,-1.0,1.0)

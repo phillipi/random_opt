@@ -22,6 +22,7 @@ class NetMNIST(nn.Module):
         x = F.relu(self.conv1(x))
         x = F.relu(self.conv2(x))
         x = F.relu(self.conv3(x))
+        print(x.shape)
         x = x.view(-1, 2*2*20)
         x = self.fc1(x)
         return F.log_softmax(x, dim=1)

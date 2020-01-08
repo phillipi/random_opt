@@ -95,10 +95,12 @@ def train(args, seed_start, N, model, device, train_loader, epoch):
     
     accs = np.zeros(N)
     losses = np.ones(N) * np.inf
+    seeds = np.zeros(N)
     for i in range(0,N):
         
         # rand init
         seed = i+seed_start
+        seeds[i] = seed
         torch.manual_seed(seed)
         model.apply(weights_init)
 
@@ -167,13 +169,15 @@ def train(args, seed_start, N, model, device, train_loader, epoch):
             best_loss = np.min(losses)
             print('(iter {}) best loss: {}'.format(i, best_loss))
     
+    i = np.argmax(accs)
+    print('top seed: {} (loss: {}, acc: {}%)'.format(seeds[i], losses[i], accs[i]))
     #return best_seed, best_acc
     return accs, losses
 
 def test(args, models, weights, device, test_loader, train_loader):
     
     for model in models:
-        model.train()#eval()
+        model.eval()
     
     criterion = nn.CrossEntropyLoss()
     

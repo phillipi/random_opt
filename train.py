@@ -218,13 +218,12 @@ def test(args, models, weights, device, test_loader, train_loader):
         '''
         
         # ensemble by voting
-        N_classes = 10
         preds = None
         for model_idx, model in enumerate(models):
             output = model(data)
             if preds is None:
                 preds = output*0.0
-            preds[output.argmax(dim=1, keepdim=True)] += 1 # a single vote
+            preds[:,output.argmax(dim=1, keepdim=True)] += 1 # a single vote
         pred = preds.argmax(dim=1, keepdim=True) # majority vote
         correct += pred.eq(target.view_as(pred)).sum().item()/pred.size(0)
 

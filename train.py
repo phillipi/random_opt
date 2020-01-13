@@ -11,6 +11,7 @@ import numpy as np
 import time
 
 class NetMNIST(nn.Module):
+    '''
     def __init__(self):
         super(NetMNIST, self).__init__()
         self.conv1 = nn.Conv2d(1, 20, 4, 2) # 28x28 --> 13x13
@@ -25,6 +26,7 @@ class NetMNIST(nn.Module):
         x = x.view(-1, 2*2*20)
         x = self.fc1(x)
         return F.log_softmax(x, dim=1)
+    '''
     '''
     def __init__(self):
         super(NetMNIST, self).__init__()
@@ -47,6 +49,14 @@ class NetMNIST(nn.Module):
         #x = self.fc1(x)
         return F.log_softmax(x, dim=1)
     '''
+    def __init__(self):
+        super(NetMNIST, self).__init__()
+        self.fc1 = nn.Linear(28*28, 10)
+    
+    def forward(self, x):
+        x = x.view(-1, 28*28)
+        x = self.fc1(x)
+        return F.log_softmax(x, dim=1)
 
 class NetCIFAR10(nn.Module):
     '''

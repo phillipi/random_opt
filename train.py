@@ -80,7 +80,7 @@ class NetCIFAR10(nn.Module):
     def __init__(self):
         super(NetCIFAR10, self).__init__()
         self.fc1 = nn.Linear(32*32*3, 10)
-        self.fc2 = nn.Linear(32*32*3, 10)
+        self.fc2 = nn.Linear(10, 10)
     
     def forward(self, x):
         x = x.view(-1, 32*32*3)
